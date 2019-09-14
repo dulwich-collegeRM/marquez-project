@@ -666,40 +666,71 @@ def maze_initiate():
 
     reach_floor = False
     while not reach_floor:
+
         if top_connect == False:
-            next_block_top = [0, 1, 2]
-            if previous_top == 0:
-                previous_top = 2
-            if previous_top == 2:
-                previous_top = 0
-            if previous_top == 1:
-                previous_top = None
-            
+
+
+#this sets the previous choice as previous_top so the maze can not go back in itself            
             if previous_top != None:
+                if previous_top == 0:
+                    previous_top == 2
+                if previous_top == 2:
+                    previous_top == 0
+                if previous_top == 1:
+                    previous_top == None
+            
+            
+            next_block_top = [0, 1, 2]
 
-                if top_x == 0:
-                    next_block_top.remove(2)
-                    if previous_top != 2:
-                        next_block_top.remove(previous_top)
-                
-                    
-                
-                elif top_x == 19:
-                    next_block_top.remove(0)
-                    if previous_top != 0:
-                        next_block_top.remove(previous_top)
-                
-#                elif top_y == 0:
-#                    next_block_top.remove(0)
-#                    if previous_top != 0:
-#                        next_block_top.remove(previous_top)
-
-                elif top_y == 19:
-                    next_block_top.remove(1)
-                    if previous_top != 1:
-                        next_block_top.remove(previous_top)
-                else:
+            if top_x == 0:
+                next_block_top.remove(2)
+            if top_x == 19:
+                next_block_top.remove(0)
+            if top_y == 19:
+                next_block_top.remove(1)
+            if previous_top in next_block_top:
+                if previous_top != None:
                     next_block_top.remove(previous_top)
+
+            
+
+##              next_block_top.remove(previous_top)
+            
+
+##        if top_connect == False:
+##            next_block_top = [0, 1, 2]
+##            if previous_top == 0:
+##                previous_top = 2
+##            if previous_top == 2:
+##                previous_top = 0
+##            if previous_top == 1:
+##                previous_top = None
+##            
+##            if previous_top != None:
+##
+##                if top_x == 0:
+##                    next_block_top.remove(2)
+##                    if previous_top != 2:
+##                        next_block_top.remove(previous_top)
+##                
+##                    
+##                
+##                elif top_x == 19:
+##                    next_block_top.remove(0)
+##                    if previous_top != 0:
+##                        next_block_top.remove(previous_top)
+##                
+###                elif top_y == 0:
+###                    next_block_top.remove(0)
+###                    if previous_top != 0:
+###                        next_block_top.remove(previous_top)
+##
+##                elif top_y == 19:
+##                    next_block_top.remove(1)
+##                    if previous_top != 1:
+##                        next_block_top.remove(previous_top)
+##                else:
+##                    next_block_top.remove(previous_top)
                 
                     
             #this stops the blocks from appearing on the previous block or outside the screen
@@ -759,36 +790,58 @@ def maze_initiate():
             previous_top = random_top
 
         if leftside_connect == False:
+
+            if previous_leftside!= None:
+                if previous_leftside == 0:
+                    previous_leftside = 2
+                if previous_leftside == 2:
+                    previous_leftside = 0
+                if previous_leftside == 1:
+                    previous_leftside = None
+
+            
             next_block_leftside = [0, 1, 2]
-            if previous_leftside == 0:
-                previous_leftside = 2
-            if previous_leftside == 2:
-                previous_leftside = 0
-            if previous_leftside == 1:
-                previous_leftside = None
-            if previous_leftside != None:
-#                if leftside_x == 0:
-#                    next_block_leftside.remove(3)
-#                    if previous_leftside != 3:
-#                        next_block_leftside.remove(previous_leftside)
-                if leftside_x == 19:
-                    next_block_leftside.remove(1)
-                    if previous_leftside != 1:
-                        next_block_leftside.remove(previous_leftside)
-                
-                    
-                elif leftside_y == 0:
-                    next_block_leftside.remove(0)
-                    if previous_leftside != 0:
-                        next_block_leftside.remove(previous_leftside)
-                
-                    
-                elif leftside_y == 19:
-                    next_block_leftside.remove(2)
-                    if previous_leftside != 2:
-                        next_block_leftside.remove(previous_leftside)
-                else:
+
+            if leftside_x == 19:
+                next_block_leftside.remove(1)
+            if leftside_y == 0:
+                next_block_leftside.remove(0)
+            if leftside_y == 19:
+                next_block_leftside.remove(2)
+            if previous_leftside in next_block_leftside:
+                if previous_leftside != None:
                     next_block_leftside.remove(previous_leftside)
+            
+                
+##            if previous_leftside == 0:
+##                previous_leftside = 2
+##            if previous_leftside == 2:
+##                previous_leftside = 0
+##            if previous_leftside == 1:
+##                previous_leftside = None
+##            if previous_leftside != None:
+###                if leftside_x == 0:
+###                    next_block_leftside.remove(3)
+###                    if previous_leftside != 3:
+###                        next_block_leftside.remove(previous_leftside)
+##                if leftside_x == 19:
+##                    next_block_leftside.remove(1)
+##                    if previous_leftside != 1:
+##                        next_block_leftside.remove(previous_leftside)
+##                
+##                    
+##                elif leftside_y == 0:
+##                    next_block_leftside.remove(0)
+##                    if previous_leftside != 0:
+##                        next_block_leftside.remove(previous_leftside)
+##                
+##                    
+##                elif leftside_y == 19:
+##                    next_block_leftside.remove(2)
+##                    if previous_leftside != 2:
+##                        next_block_leftside.remove(previous_leftside)
+##                else:
+##                    next_block_leftside.remove(previous_leftside)
                     
             
             random_leftside = random.choice(next_block_leftside)
@@ -846,35 +899,56 @@ def maze_initiate():
 ##                
 
         if rightside_connect == False:
-            next_block_rightside = [0, 1, 2]
-            if previous_rightside == 0:
-                previous_rightside = 2
-            if previous_rightside == 2:
-                previous_rightside = 0
-            if previous_rightside == 1:
-                previous_rightside = None
-            if previous_rightside != None:
-                if rightside_x == 0:
-                    next_block_rightside.remove(1)
-                    if previous_rightside != 1:
-                        next_block_rightside.remove(previous_rightside)
-                
-#                if rightside_x == 19:
-#                    next_block_rightside.remove(3)
-#                    if previous_rightside != 3:
-#                       next_block_rightside.remove(previous_rightside)
 
-                if rightside_y == 0:
-                    next_block_rightside.remove(0)
-                    if previous_rightside != 0:
-                        next_block_rightside.remove(previous_rightside)
-                
-                if rightside_y == 19:
-                    next_block_rightside.remove(2)
-                    if previous_rightside != 2:
-                        next_block_rightside.remove(previous_rightside)
-                else:
-                    next_block_rightside.remove(previous_rightside)
+            if previous_rightside != None:
+                if previous_rightside == 0:
+                    previous_rightside == 2
+                if previous_rightside == 2:
+                    previous_rightside == 0
+                if previous_rightside == 1:
+                    previous_rightside == None
+            
+            
+            next_block_rightside = [0, 1, 2]
+
+            if rightside_x == 0:
+                next_block_rightside.remove(1)
+            if rightside_y == 0:
+                next_block_rightside.remove(0)
+            if rightside_y == 19:
+                next_block_rightside.remove(2)
+            if previous_rightside in next_block_rightside:
+                if previous_rightside != None:
+                    next_block_rightside.remove(previous_top)
+##            next_block_rightside = [0, 1, 2]
+##            if previous_rightside == 0:
+##                previous_rightside = 2
+##            if previous_rightside == 2:
+##                previous_rightside = 0
+##            if previous_rightside == 1:
+##                previous_rightside = None
+##            if previous_rightside != None:
+##                if rightside_x == 0:
+##                    next_block_rightside.remove(1)
+##                    if previous_rightside != 1:
+##                        next_block_rightside.remove(previous_rightside)
+##                
+###                if rightside_x == 19:
+###                    next_block_rightside.remove(3)
+###                    if previous_rightside != 3:
+###                       next_block_rightside.remove(previous_rightside)
+##
+##                if rightside_y == 0:
+##                    next_block_rightside.remove(0)
+##                    if previous_rightside != 0:
+##                        next_block_rightside.remove(previous_rightside)
+##                
+##                if rightside_y == 19:
+##                    next_block_rightside.remove(2)
+##                    if previous_rightside != 2:
+##                        next_block_rightside.remove(previous_rightside)
+##                else:
+##                    next_block_rightside.remove(previous_rightside)
                 
             random_rightside = random.choice(next_block_rightside)
             if random_rightside == 0:
@@ -933,30 +1007,52 @@ def maze_initiate():
 
 
         if bottom_connect == False:
-            next_block_bottom = [0, 1, 2]
-            if previous_bottom == 0:
-                previous_bottom = 2
-            if previous_bottom == 2:
-                previous_bottom = 0
-            if previous_bottom == 1:
-                previous_bottom = None
+
             if previous_bottom != None:
-                if bottom_x == 0:
-                    next_block_bottom.remove(0)
-                    if previous_bottom != 0:
-                        next_block_bottom.remove(previous_bottom)
-                    
-                elif bottom_x == 19:
-                    next_block_bottom.remove(2)
-                    if previous_bottom != 2:
-                        next_block_bottom.remove(previous_bottom)
-                    
-                elif bottom_y == 0:
-                    next_block_bottom.remove(1)
-                    if previous_bottom != 1:
-                        next_block_bottom.remove(previous_bottom)
-                else:
+                if previous_bottom == 0:
+                    previous_bottom == 2
+                if previous_bottom == 2:
+                    previous_bottom == 0
+                if previous_bottom == 1:
+                    previous_bottom == None
+            
+            
+            next_block_bottom = [0, 1, 2]
+
+            if bottom_x == 0:
+                next_block_bottom.remove(0)
+            if bottom_x == 19:
+                next_block_bottom.remove(2)
+            if bottom_y == 19:
+                next_block_bottom.remove(1)
+            if previous_bottom in next_block_bottom:
+                if previous_bottom != None:
                     next_block_bottom.remove(previous_bottom)
+                    
+##            next_block_bottom = [0, 1, 2]
+##            if previous_bottom == 0:
+##                previous_bottom = 2
+##            if previous_bottom == 2:
+##                previous_bottom = 0
+##            if previous_bottom == 1:
+##                previous_bottom = None
+##            if previous_bottom != None:
+##                if bottom_x == 0:
+##                    next_block_bottom.remove(0)
+##                    if previous_bottom != 0:
+##                        next_block_bottom.remove(previous_bottom)
+##                    
+##                elif bottom_x == 19:
+##                    next_block_bottom.remove(2)
+##                    if previous_bottom != 2:
+##                        next_block_bottom.remove(previous_bottom)
+##                    
+##                elif bottom_y == 0:
+##                    next_block_bottom.remove(1)
+##                    if previous_bottom != 1:
+##                        next_block_bottom.remove(previous_bottom)
+##                else:
+##                    next_block_bottom.remove(previous_bottom)
                     
 #                if bottom_y == 19:
 #                    next_block_bottom.remove(3)
@@ -1021,6 +1117,7 @@ def maze_initiate():
 
         if leftside_connect == True and top_connect == True and rightside_connect == True and bottom_connect == True:
             reach_floor = True
+
 
 ##    for e in range(3):
 ##        for i in range(2):
