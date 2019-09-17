@@ -54,19 +54,6 @@ class Player(pygame.sprite.Sprite):
 
 
 
-##    def move_r(self, x_speed):
-##        self.rect.x += x_speed
-##        
-##    def move_l(self, x_speed):
-##        self.rect.x -= x_speed
-##        
-##    def move_u(self, y_speed):
-##        self.rect.y -= y_speed
-##        
-##    def move_d(self, y_speed):
-##        self.rect.y += y_speed
-
-
     def update(self):
 
         self.rect.x += self.x_speed
@@ -126,14 +113,7 @@ class Floor(pygame.sprite.Sprite):
         self.rect.y = y
 
 
-##            if player.x_speed > 0:
-##                player.rect.x = ablock.rect.x - 30
-##            if player.x_speed < 0:
-##                player.rect.x = ablock.rect.x + 50
-##            if player.y_speed > 0:
-##                player.rect.y = ablock.rect.y - 30
-##            if player.y_speed < 0:
-##                player.rect.y = ablock.rect.y + 50
+
 
 block_array = []
 floor_array = []
@@ -589,16 +569,6 @@ maze_graph = { maze_array[0][0]: [maze_array[1][0], maze_array[0][1]],
                    maze_array[19][19]: [maze_array[18][19], maze_array[19][18]]}
 
 
-##for x in range(19):
-##    for y in range(19):
-##        rand = random.randint(1,2)
-##        if rand == 1:
-##            maze_array[x][y] = Floor(LIGHTGRAY, x * 40, y * 40)
-##            floor_sprite_list.add(maze_array[x][y])
-##        else:
-##            maze_array[x][y] = Block(BLACK, x * 40, y * 40)
-##            block_sprite_list.add(maze_array[x][y])
-##        all_sprites_list.add(maze_array[x][y])
 
 def maze_initiate():
 
@@ -607,7 +577,7 @@ def maze_initiate():
             maze_array[x][y] = Block(BLACK, x * 40, y * 40)
             block_sprite_list.add(maze_array[x][y])
             all_sprites_list.add(maze_array[x][y])
-            #block_array.append(maze_array[x][y])
+
 #set a starting block
     random_int = [random.randint(0,19), random.randint(0,19), random.randint(0,19), random.randint(0,19)]
 
@@ -669,15 +639,17 @@ def maze_initiate():
 
         if top_connect == False:
 
-
+ #           print(previous_top)
 #this sets the previous choice as previous_top so the maze can not go back in itself            
-            if previous_top != None:
+            if previous_top:
+#                print("Previous top", str(previous_top))
                 if previous_top == 0:
-                    previous_top == 2
+  #                  print("gabriels a thot")
+                    previous_top = 2
                 if previous_top == 2:
-                    previous_top == 0
+                    previous_top = 0
                 if previous_top == 1:
-                    previous_top == None
+                    previous_top = None
             
             
             next_block_top = [0, 1, 2]
@@ -692,63 +664,22 @@ def maze_initiate():
                 if previous_top != None:
                     next_block_top.remove(previous_top)
 
+            print(next_block_top)
             
+    #        print(top_x)
 
-##              next_block_top.remove(previous_top)
-            
+     #       print(str(previous_top)," prev top" )
 
-##        if top_connect == False:
-##            next_block_top = [0, 1, 2]
-##            if previous_top == 0:
-##                previous_top = 2
-##            if previous_top == 2:
-##                previous_top = 0
-##            if previous_top == 1:
-##                previous_top = None
-##            
-##            if previous_top != None:
-##
-##                if top_x == 0:
-##                    next_block_top.remove(2)
-##                    if previous_top != 2:
-##                        next_block_top.remove(previous_top)
-##                
-##                    
-##                
-##                elif top_x == 19:
-##                    next_block_top.remove(0)
-##                    if previous_top != 0:
-##                        next_block_top.remove(previous_top)
-##                
-###                elif top_y == 0:
-###                    next_block_top.remove(0)
-###                    if previous_top != 0:
-###                        next_block_top.remove(previous_top)
-##
-##                elif top_y == 19:
-##                    next_block_top.remove(1)
-##                    if previous_top != 1:
-##                        next_block_top.remove(previous_top)
-##                else:
-##                    next_block_top.remove(previous_top)
-                
                     
             #this stops the blocks from appearing on the previous block or outside the screen
                 
             random_top = random.choice(next_block_top)
-            #randomly selects from the possible directions in which the next block can be placed
-##            if random_top == 3:
-##                top_y -= 1
-##                if  isinstance(maze_array[top_x][top_y], Block): # != Floor(LIGHTGRAY, top_x * 40, top_y * 40):
-##                    block_sprite_list.remove(maze_array[top_x][top_y])
-##                    all_sprites_list.remove(maze_array[top_x][top_y])
-##                    maze_array[top_x][top_y] = Floor(LIGHTGRAY, top_x * 40, top_y * 40)
-##                    all_sprites_list.add(maze_array[top_x][top_y])
-##                    floor_sprite_list.add(maze_array[top_x][top_y])
-##                else:
-##                    top_y += 1
-##                    top_connect = True
-##                
+            
+            print(random_top)
+            
+
+            
+
 
             if random_top == 0:
                 top_x += 1
@@ -762,7 +693,7 @@ def maze_initiate():
                     top_x -= 1
                     top_connect = True
                 #This checks whether the next block on the right is part of the floor class and if not it replaces the prior block with 
-            print( next_block_top)
+            
             if random_top == 1:
                 top_y += 1
                 if isinstance(maze_array[top_x][top_y], Block) == True: #!= Floor(LIGHTGRAY, top_x * 40, top_y * 40):
@@ -813,35 +744,7 @@ def maze_initiate():
                     next_block_leftside.remove(previous_leftside)
             
                 
-##            if previous_leftside == 0:
-##                previous_leftside = 2
-##            if previous_leftside == 2:
-##                previous_leftside = 0
-##            if previous_leftside == 1:
-##                previous_leftside = None
-##            if previous_leftside != None:
-###                if leftside_x == 0:
-###                    next_block_leftside.remove(3)
-###                    if previous_leftside != 3:
-###                        next_block_leftside.remove(previous_leftside)
-##                if leftside_x == 19:
-##                    next_block_leftside.remove(1)
-##                    if previous_leftside != 1:
-##                        next_block_leftside.remove(previous_leftside)
-##                
-##                    
-##                elif leftside_y == 0:
-##                    next_block_leftside.remove(0)
-##                    if previous_leftside != 0:
-##                        next_block_leftside.remove(previous_leftside)
-##                
-##                    
-##                elif leftside_y == 19:
-##                    next_block_leftside.remove(2)
-##                    if previous_leftside != 2:
-##                        next_block_leftside.remove(previous_leftside)
-##                else:
-##                    next_block_leftside.remove(previous_leftside)
+
                     
             
             random_leftside = random.choice(next_block_leftside)
@@ -884,29 +787,17 @@ def maze_initiate():
                     leftside_connect = True
             previous_leftside = random_leftside
                     
-##            if random_leftside == 3:
-##                leftside_x -= 1
-##                if isinstance(maze_array[leftside_x][leftside_y], Block): # != Floor(LIGHTGRAY, leftside_x * 40, leftside_y * 40):
-##                    
-##                    block_sprite_list.remove(maze_array[leftside_x][leftside_y])
-##                    all_sprites_list.remove(maze_array[top_x][top_y])
-##                    maze_array[leftside_x][leftside_y] = Floor(LIGHTGRAY, leftside_x * 40, leftside_y * 40)
-##                    all_sprites_list.add(maze_array[leftside_x][leftside_y])
-##                    floor_sprite_list.add(maze_array[leftside_x][leftside_y])
-##                else:
-##                    leftside_x += 1
-##                    leftside_connect = True
-##                
+
 
         if rightside_connect == False:
 
             if previous_rightside != None:
                 if previous_rightside == 0:
-                    previous_rightside == 2
+                    previous_rightside = 2
                 if previous_rightside == 2:
-                    previous_rightside == 0
+                    previous_rightside = 0
                 if previous_rightside == 1:
-                    previous_rightside == None
+                    previous_rightside = None
             
             
             next_block_rightside = [0, 1, 2]
@@ -920,35 +811,7 @@ def maze_initiate():
             if previous_rightside in next_block_rightside:
                 if previous_rightside != None:
                     next_block_rightside.remove(previous_top)
-##            next_block_rightside = [0, 1, 2]
-##            if previous_rightside == 0:
-##                previous_rightside = 2
-##            if previous_rightside == 2:
-##                previous_rightside = 0
-##            if previous_rightside == 1:
-##                previous_rightside = None
-##            if previous_rightside != None:
-##                if rightside_x == 0:
-##                    next_block_rightside.remove(1)
-##                    if previous_rightside != 1:
-##                        next_block_rightside.remove(previous_rightside)
-##                
-###                if rightside_x == 19:
-###                    next_block_rightside.remove(3)
-###                    if previous_rightside != 3:
-###                       next_block_rightside.remove(previous_rightside)
-##
-##                if rightside_y == 0:
-##                    next_block_rightside.remove(0)
-##                    if previous_rightside != 0:
-##                        next_block_rightside.remove(previous_rightside)
-##                
-##                if rightside_y == 19:
-##                    next_block_rightside.remove(2)
-##                    if previous_rightside != 2:
-##                        next_block_rightside.remove(previous_rightside)
-##                else:
-##                    next_block_rightside.remove(previous_rightside)
+
                 
             random_rightside = random.choice(next_block_rightside)
             if random_rightside == 0:
@@ -964,19 +827,7 @@ def maze_initiate():
                     rightside_connect = True
                 
 
-##            if random_rightside == 1:
-##                rightside_x += 1
-##                if isinstance(maze_array[rightside_x][rightside_y], Block): # != Floor(LIGHTGRAY, rightside_x * 40, rightside_y * 40):
-##
-##                    block_sprite_list.remove(maze_array[rightside_x][rightside_y])
-##                    all_sprites_list.remove(maze_array[rightside_x][rightside_y])
-##                    maze_array[rightside_x][rightside_y] = Floor(LIGHTGRAY, rightside_x * 40, rightside_y * 40)
-##                    all_sprites_list.add(maze_array[rightside_x][rightside_y])
-##                    floor_sprite_list.add(maze_array[rightside_x][rightside_y])
-##                else:
-##                    rightside_x -= 1
-##                    rightside_connect = True
-##                
+
 
             if random_rightside == 2:
                 rightside_y += 1
@@ -1010,11 +861,11 @@ def maze_initiate():
 
             if previous_bottom != None:
                 if previous_bottom == 0:
-                    previous_bottom == 2
+                    previous_bottom = 2
                 if previous_bottom == 2:
-                    previous_bottom == 0
+                    previous_bottom = 0
                 if previous_bottom == 1:
-                    previous_bottom == None
+                    previous_bottom = None
             
             
             next_block_bottom = [0, 1, 2]
@@ -1029,36 +880,7 @@ def maze_initiate():
                 if previous_bottom != None:
                     next_block_bottom.remove(previous_bottom)
                     
-##            next_block_bottom = [0, 1, 2]
-##            if previous_bottom == 0:
-##                previous_bottom = 2
-##            if previous_bottom == 2:
-##                previous_bottom = 0
-##            if previous_bottom == 1:
-##                previous_bottom = None
-##            if previous_bottom != None:
-##                if bottom_x == 0:
-##                    next_block_bottom.remove(0)
-##                    if previous_bottom != 0:
-##                        next_block_bottom.remove(previous_bottom)
-##                    
-##                elif bottom_x == 19:
-##                    next_block_bottom.remove(2)
-##                    if previous_bottom != 2:
-##                        next_block_bottom.remove(previous_bottom)
-##                    
-##                elif bottom_y == 0:
-##                    next_block_bottom.remove(1)
-##                    if previous_bottom != 1:
-##                        next_block_bottom.remove(previous_bottom)
-##                else:
-##                    next_block_bottom.remove(previous_bottom)
-                    
-#                if bottom_y == 19:
-#                    next_block_bottom.remove(3)
-#                    if previous_bottom != 3:
-#                        next_block_bottom.remove(previous_bottom)
-            
+
             random_bottom = random.choice(next_block_bottom)
             if random_bottom == 1:
                 bottom_y -= 1
@@ -1086,18 +908,7 @@ def maze_initiate():
                     bottom_connect = True
                 previous_bottom = random_bottom
 
-##            if random_bottom == 3:
-##                bottom_y += 1
-##                if isinstance(maze_array[bottom_x][bottom_y], Block): # != Floor(LIGHTGRAY, bottom_x * 40, bottom_y * 40):
-##                    block_sprite_list.remove(maze_array[bottom_x][bottom_y])
-##                    all_sprites_list.remove(maze_array[bottom_x][bottom_y])
-##                    maze_array[bottom_x][bottom_y] = Floor(LIGHTGRAY, bottom_x * 40, bottom_y * 40)
-##                    all_sprites_list.add(maze_array[bottom_x][bottom_y])
-##                    floor_sprite_list.add(maze_array[bottom_x][bottom_y])
-##                else:
-##                    bottom_y -= 1
-##                    bottom_connect = True
-##                previous_bottom = random_bottom
+
                   
                 
             if random_bottom == 0:
@@ -1119,167 +930,6 @@ def maze_initiate():
             reach_floor = True
 
 
-##    for e in range(3):
-##        for i in range(2):
-##                x_column = i * 19
-##                rand1 = random.randint(0,19)
-##                block_sprite_list.remove(maze_array[x_column][rand1])
-##                #block_array.remove(maze_array[x_column][rand1])
-##                all_sprites_list.remove(maze_array[x_column][rand1])
-##                maze_array[x_column][rand1] = Floor(LIGHTGRAY, x_column * 40, rand1 * 40)
-##                floor_sprite_list.add(maze_array[x_column][rand1])
-##                all_sprites_list.add(maze_array[x_column][rand1])
-##                floor_array.append(maze_array[x_column][rand1])
-##
-##                #x_pos_maze = x_column * 40
-##                #y_pos_maze = rand1 * 40
-##                current_block = maze_array[x_column][rand1]
-##                previousblock = 5
-##            
-##                for count in range(12):
-##                
-##                    #current_block = maze_array[x_column][rand1]
-##                    nextblock = [0, 1, 2, 3]
-##                    if x_column == 0 or previousblock == 2 :
-##                        nextblock.remove(0)
-##                    if x_column == 19 or previousblock == 0:
-##                        nextblock.remove(2)
-##                    if rand1 == 0 or previousblock == 3:
-##                        nextblock.remove(1)
-##                    if rand1 == 19 or previousblock == 1:
-##                        nextblock.remove(3)
-##    
-##                    random1 = random.choice(nextblock)
-##
-##                    if random1 == 0:
-##                        x_column = x_column - 1
-##                        block_sprite_list.remove(maze_array[x_column][rand1])
-##                        #block_array.remove(maze_array[x_column][rand1])
-##                        all_sprites_list.remove(maze_array[x_column][rand1])
-##                        maze_array[x_column][rand1] = Floor(LIGHTGRAY, x_column * 40, rand1 * 40)
-##                        floor_sprite_list.add(maze_array[x_column][rand1])
-##                        all_sprites_list.add(maze_array[x_column][rand1])
-##                        floor_array.append(maze_array[x_column][rand1])
-##                    elif random1 == 1:
-##                        rand1 = rand1 - 1
-##                        block_sprite_list.remove(maze_array[x_column][rand1])
-##                        #block_array.remove(maze_array[x_column][rand1])
-##                        all_sprites_list.remove(maze_array[x_column][rand1])
-##                        maze_array[x_column][rand1] = Floor(LIGHTGRAY, x_column * 40, rand1 * 40)
-##                        floor_sprite_list.add(maze_array[x_column][rand1])
-##                        all_sprites_list.add(maze_array[x_column][rand1])
-##                        floor_array.append(maze_array[x_column][rand1])
-##                    elif random1 == 2:
-##                        x_column += 1
-##                        block_sprite_list.remove(maze_array[x_column][rand1])
-##                        #block_array.remove(maze_array[x_column][rand1])
-##                        all_sprites_list.remove(maze_array[x_column][rand1])
-##                        maze_array[x_column][rand1] = Floor(LIGHTGRAY, x_column * 40, rand1 * 40)
-##                        floor_sprite_list.add(maze_array[x_column][rand1])
-##                        all_sprites_list.add(maze_array[x_column][rand1])
-##                        floor_array.append(maze_array[x_column][rand1])
-##                    elif random1 == 3:
-##                        rand1 += 1
-##                        block_sprite_list.remove(maze_array[x_column][rand1])
-##                        #block_array.remove(maze_array[x_column][rand1])
-##                        all_sprites_list.remove(maze_array[x_column][rand1])
-##                        maze_array[x_column][rand1] = Floor(LIGHTGRAY, x_column * 40, rand1 * 40)
-##                        floor_sprite_list.add(maze_array[x_column][rand1])
-##                        all_sprites_list.add(maze_array[x_column][rand1])
-##                        floor_array.append(maze_array[x_column][rand1])
-##
-##                
-##                    previousblock = random1
-##
-##                
-##    for e in range(3):
-##        for counter in range(2):
-##                y_row = counter * 19
-##                rand2 = random.randint(0,19)
-##                block_sprite_list.remove(maze_array[rand2][y_row])
-##                #block_array.remove(maze_array[x_column][rand1])
-##                all_sprites_list.remove(maze_array[rand2][y_row])
-##                maze_array[rand2][y_row] = Floor(LIGHTGRAY, rand2 * 40, y_row * 40)
-##                floor_sprite_list.add(maze_array[rand2][y_row])
-##                all_sprites_list.add(maze_array[rand2][y_row])
-##                floor_array.append(maze_array[rand2][y_row])
-##
-##                #x_pos_maze = x_column * 40
-##                #y_pos_maze = rand1 * 40
-##                current_block = maze_array[rand2][y_row]
-##                previous_block = 5
-##            
-##                for count in range(12):
-##                
-##                    #current_block = maze_array[x_column][rand1]
-##                    next_block = [0, 1, 2, 3]
-##                    if rand2 == 0 or previous_block == 2 :
-##                        next_block.remove(0)
-##                    if rand2 == 19 or previous_block == 0:
-##                        next_block.remove(2)
-##                    if y_row == 0 or previous_block == 3:
-##                        next_block.remove(1)
-##                    if y_row == 19 or previous_block == 1:
-##                        next_block.remove(3)
-##    
-##                    random2 = random.choice(next_block)
-##
-##                    if random2 == 0:
-##                        rand2 = rand2 - 1
-##                        block_sprite_list.remove(maze_array[rand2][y_row])
-##                        #block_array.remove(maze_array[x_column][rand1])
-##                        all_sprites_list.remove(maze_array[rand2][y_row])
-##                        maze_array[rand2][y_row] = Floor(LIGHTGRAY, rand2 * 40, y_row * 40)
-##                        floor_sprite_list.add(maze_array[rand2][y_row])
-##                        all_sprites_list.add(maze_array[rand2][y_row])
-##                        floor_array.append(maze_array[rand2][y_row])
-##                    elif random2 == 1:
-##                        y_row = y_row - 1
-##                        block_sprite_list.remove(maze_array[rand2][y_row])
-##                        #block_array.remove(maze_array[x_column][rand1])
-##                        all_sprites_list.remove(maze_array[rand2][y_row])
-##                        maze_array[rand2][y_row] = Floor(LIGHTGRAY, rand2 * 40, y_row * 40)
-##                        floor_sprite_list.add(maze_array[rand2][y_row])
-##                        all_sprites_list.add(maze_array[rand2][y_row])
-##                        floor_array.append(maze_array[rand2][y_row])
-##                    elif random1 == 2:
-##                        rand2 += 1
-##                        block_sprite_list.remove(maze_array[rand2][y_row])
-##                        #block_array.remove(maze_array[x_column][rand1])
-##                        all_sprites_list.remove(maze_array[rand2][y_row])
-##                        maze_array[rand2][y_row] = Floor(LIGHTGRAY, rand2 * 40, y_row * 40)
-##                        floor_sprite_list.add(maze_array[rand2][y_row])
-##                        all_sprites_list.add(maze_array[rand2][y_row])
-##                        floor_array.append(maze_array[rand2][y_row])
-##                    elif random1 == 3:
-##                        y_row += 1
-##                        block_sprite_list.remove(maze_array[rand2][y_row])
-##                        #block_array.remove(maze_array[x_column][rand1])
-##                        all_sprites_list.remove(maze_array[rand2][y_row])
-##                        maze_array[rand2][y_row] = Floor(LIGHTGRAY, rand2 * 40, y_row * 40)
-##                        floor_sprite_list.add(maze_array[rand2][y_row])
-##                        all_sprites_list.add(maze_array[rand2][y_row])
-##                        floor_array.append(maze_array[rand2][y_row])
-##
-##                
-##                    previous_block = random2
-##                
-                
-                    
-                
-        
-
-    
-##    for counter in range(2):
-##            y_row = counter * 19
-##            rand2 = random.randint(0,19)
-##            block_sprite_list.remove(maze_array[rand2][y_row])
-##            all_sprites_list.remove(maze_array[rand2][y_row])
-##            block_array.pop(maze_array[rand2][y_row])
-##            maze_array[rand2][y_row] = Floor(LIGHTGRAY, rand2 * 40, y_row * 40)
-##            floor_sprite_list.add(maze_array[rand2][y_row])
-##            all_sprites_list.add(maze_array[rand2][y_row])
-##            floor_array.append(maze_array[rand2][y_row])
 
 
 
@@ -1293,24 +943,12 @@ maze_initiate()
 
 
 
-##floor = Floor(LIGHTGRAY, 40, 40)
-##floor_array.append(floor)
-##block2 = Block(BLACK, 0, 40)
-##block_array.append(block2)
-##block = Block(BLACK, 0, 0)
-##block_array.append(block)
 
 
 
 player = Player(BLUE, 100, 100)
 
 all_sprites_list.add(player)
-##all_sprites_list.add(block)
-##all_sprites_list.add(floor)
-##all_sprites_list.add(block2)
-##block_sprite_list.add(block)
-##block_sprite_list.add(block2)
-##floor_sprite_list.add(floor)
 
 player.blocks = block_sprite_list
 player.floors = floor_sprite_list
@@ -1353,20 +991,10 @@ while not done:
 
     # --- Game logic should go here
     
-##    key_pr = pygame.key.get_pressed()
-##    if key_pr[pygame.K_LEFT]:
-##        Player1.control(-4,0)
-##    if key_pr[pygame.K_RIGHT]:
-##        Player1.control(4,0)
-##    if key_pr[pygame.K_UP]:
-##        Player1.control(0,-4)
-##    if key_pr[pygame.K_DOWN]:
-##        Player1.control(0,4)
+
     
 
-    #all_sprites_list.remove(player)
-    #player.update()
-    #all_sprites_list.add(player)
+
     
     
     all_sprites_list.update()
