@@ -675,8 +675,8 @@ def maze_initiate():
 
                     
             #this stops the blocks from appearing on the previous block or outside the screen
-                
-            random_top = random.choice(next_block_top)
+            if len(next_block_top) != 0:    
+                random_top = random.choice(next_block_top)
             
 #            print("next block =", str(random_top))
             
@@ -746,11 +746,11 @@ def maze_initiate():
                 if previous_leftside != None:
                     next_block_leftside.remove(previous_leftside)
             
-                
 
                     
-            
-            random_leftside = random.choice(next_block_leftside)
+            if len(next_block_leftside) != 0:
+                random_leftside = random.choice(next_block_leftside)
+
             if random_leftside == 0:
                 leftside_y -= 1
                 if isinstance(maze_array[leftside_x][leftside_y], Block) == True: # != Floor(LIGHTGRAY, leftside_x * 40, leftside_y * 40):
@@ -815,8 +815,9 @@ def maze_initiate():
                 if previous_rightside != None:
                     next_block_rightside.remove(previous_top)
 
+            if len(next_block_rightside) != 0:    
+                random_rightside = random.choice(next_block_rightside)
                 
-            random_rightside = random.choice(next_block_rightside)
             if random_rightside == 0:
                 rightside_y -= 1
                 if isinstance(maze_array[rightside_x][rightside_y], Block) == True: # != Floor(LIGHTGRAY, rightside_x * 40, rightside_y * 40):
@@ -882,9 +883,11 @@ def maze_initiate():
             if previous_bottom in next_block_bottom:
                 if previous_bottom != None:
                     next_block_bottom.remove(previous_bottom)
-                    
 
-            random_bottom = random.choice(next_block_bottom)
+            if len(next_block_bottom) != 0:
+                random_bottom = random.choice(next_block_bottom)
+
+            
             if random_bottom == 1:
                 bottom_y -= 1
                 if isinstance(maze_array[bottom_x][bottom_y], Block) == True: # != Floor(LIGHTGRAY, bottom_x * 40, bottom_y * 40):
