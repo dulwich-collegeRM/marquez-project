@@ -639,16 +639,18 @@ def maze_initiate():
 
         if top_connect == False:
 
- #           print(previous_top)
+#            print("previous =", str(previous_top))
 #this sets the previous choice as previous_top so the maze can not go back in itself            
-            if previous_top:
+            if previous_top != None:
 #                print("Previous top", str(previous_top))
+                
                 if previous_top == 0:
-  #                  print("gabriels a thot")
+#                    print("remove 2")
                     previous_top = 2
-                if previous_top == 2:
+                elif previous_top == 2:
+#                    print("remove 0")
                     previous_top = 0
-                if previous_top == 1:
+                elif previous_top == 1:
                     previous_top = None
             
             
@@ -662,20 +664,21 @@ def maze_initiate():
                 next_block_top.remove(1)
             if previous_top in next_block_top:
                 if previous_top != None:
+
                     next_block_top.remove(previous_top)
 
-            print(next_block_top)
+#            print(next_block_top)
             
-    #        print(top_x)
+#            print(str(top_x),"= x pos")
 
-     #       print(str(previous_top)," prev top" )
+#            print("next previous top =", str(previous_top) )
 
                     
             #this stops the blocks from appearing on the previous block or outside the screen
                 
             random_top = random.choice(next_block_top)
             
-            print(random_top)
+#            print("next block =", str(random_top))
             
 
             
@@ -725,9 +728,9 @@ def maze_initiate():
             if previous_leftside!= None:
                 if previous_leftside == 0:
                     previous_leftside = 2
-                if previous_leftside == 2:
+                elif previous_leftside == 2:
                     previous_leftside = 0
-                if previous_leftside == 1:
+                elif previous_leftside == 1:
                     previous_leftside = None
 
             
@@ -794,9 +797,9 @@ def maze_initiate():
             if previous_rightside != None:
                 if previous_rightside == 0:
                     previous_rightside = 2
-                if previous_rightside == 2:
+                elif previous_rightside == 2:
                     previous_rightside = 0
-                if previous_rightside == 1:
+                elif previous_rightside == 1:
                     previous_rightside = None
             
             
@@ -862,9 +865,9 @@ def maze_initiate():
             if previous_bottom != None:
                 if previous_bottom == 0:
                     previous_bottom = 2
-                if previous_bottom == 2:
+                elif previous_bottom == 2:
                     previous_bottom = 0
-                if previous_bottom == 1:
+                elif previous_bottom == 1:
                     previous_bottom = None
             
             
