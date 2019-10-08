@@ -51,17 +51,6 @@ class Player(pygame.sprite.Sprite):
         self.x_speed = x
         self.y_speed = y
 
-##    def move_r(self, x_speed):
-##        self.rect.x += x_speed
-##        
-##    def move_l(self, x_speed):
-##        self.rect.x -= x_speed
-##        
-##    def move_u(self, y_speed):
-##        self.rect.y -= y_speed
-##        
-##    def move_d(self, y_speed):
-##        self.rect.y += y_speed
 
     def update(self):
         self.rect.x += self.x_speed 
@@ -165,16 +154,6 @@ while not done:
 
 
     # --- Game logic should go here
-    
-##    key_pr = pygame.key.get_pressed()
-##    if key_pr[pygame.K_LEFT]:
-##        Player1.control(-4,0)
-##    if key_pr[pygame.K_RIGHT]:
-##        Player1.control(4,0)
-##    if key_pr[pygame.K_UP]:
-##        Player1.control(0,-4)
-##    if key_pr[pygame.K_DOWN]:
-##        Player1.control(0,4)
     
 
     all_sprites_list.remove(player)

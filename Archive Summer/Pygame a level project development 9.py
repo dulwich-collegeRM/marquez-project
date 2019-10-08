@@ -48,17 +48,7 @@ class Player(pygame.sprite.Sprite):
         self.x_speed = x
         self.y_speed = y
 
-##    def move_r(self, x_speed):
-##        self.rect.x += x_speed
-##        
-##    def move_l(self, x_speed):
-##        self.rect.x -= x_speed
-##        
-##    def move_u(self, y_speed):
-##        self.rect.y -= y_speed
-##        
-##    def move_d(self, y_speed):
-##        self.rect.y += y_speed
+
 
     def update(self):
         self.rect.x += self.x_speed 

@@ -48,23 +48,6 @@ class Player(pygame.sprite.Sprite):
         self.x_speed += x
         self.y_speed += y
 
-            
-
-
-
-
-##    def move_r(self, x_speed):
-##        self.rect.x += x_speed
-##        
-##    def move_l(self, x_speed):
-##        self.rect.x -= x_speed
-##        
-##    def move_u(self, y_speed):
-##        self.rect.y -= y_speed
-##        
-##    def move_d(self, y_speed):
-##        self.rect.y += y_speed
-
 
     def update(self):
 
@@ -90,10 +73,7 @@ class Player(pygame.sprite.Sprite):
         floor_standing_list =  pygame.sprite.spritecollide(self, self.floors, False)
         for floor in floor_standing_list:
             print(player.lives)
-        
-##    def collide(self, all_sprites_list):
-##        if pygame.sprite.spritecollide(self, , False):
-##            self.lives = 3
+    
 
 class Block(pygame.sprite.Sprite):
 
@@ -125,14 +105,27 @@ class Floor(pygame.sprite.Sprite):
         self.rect.y = y
 
 
-##            if player.x_speed > 0:
-##                player.rect.x = ablock.rect.x - 30
-##            if player.x_speed < 0:
-##                player.rect.x = ablock.rect.x + 50
-##            if player.y_speed > 0:
-##                player.rect.y = ablock.rect.y - 30
-##            if player.y_speed < 0:
-##                player.rect.y = ablock.rect.y + 50
+
+maze_array = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
+              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,]]
 
 
 
@@ -562,26 +555,6 @@ maze_graph = { maze_array[0][0]: [maze_array[1][0], maze_array[0][1]],
                  
 
 
-maze_array = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,]]
 block_array = []
 floor_array = []
     
@@ -590,9 +563,9 @@ all_sprites_list = pygame.sprite.Group()
 
 block_sprite_list = pygame.sprite.Group()
 floor_sprite_list = pygame.sprite.Group()
-floor = Floor(LIGHTGRAY, 40, 40)
-floor_array.append(floor)
-block2 = Block(BLACK, 0, 40)
+#floor = Floor(LIGHTGRAY, 40, 40)
+#floor_array.append(floor)
+block2 = Block(BLACK, 80, 40)
 block_array.append(block2)
 block = Block(BLACK, 0, 0)
 block_array.append(block)
@@ -603,11 +576,11 @@ player = Player(BLUE, 100, 100)
 
 all_sprites_list.add(player)
 all_sprites_list.add(block)
-all_sprites_list.add(floor)
+#all_sprites_list.add(floor)
 all_sprites_list.add(block2)
 block_sprite_list.add(block)
 block_sprite_list.add(block2)
-floor_sprite_list.add(floor)
+#floor_sprite_list.add(floor)
 
 player.blocks = block_sprite_list
 player.floors = floor_sprite_list
@@ -679,7 +652,7 @@ while not done:
     
     # --- Drawing code should go here
     all_sprites_list.draw(screen)
-
+    print('player.x_speed =', str(player.x_speed), 'player.y_speed', str(player.y_speed))
     # --- Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
  

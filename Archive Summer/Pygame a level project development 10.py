@@ -51,18 +51,6 @@ class Player(pygame.sprite.Sprite):
 
 
 
-##    def move_r(self, x_speed):
-##        self.rect.x += x_speed
-##        
-##    def move_l(self, x_speed):
-##        self.rect.x -= x_speed
-##        
-##    def move_u(self, y_speed):
-##        self.rect.y -= y_speed
-##        
-##    def move_d(self, y_speed):
-##        self.rect.y += y_speed
-
     def update(self):
         self.rect.x += self.x_speed 
         self.rect.y += self.y_speed
@@ -202,7 +190,7 @@ while not done:
     # If you want a background image, replace this clear with blit'ing the
     # background image.
     screen.fill(WHITE)
-    print(player.x_speed, player.y_speed)
+    print('player.x_speed =', str(player.x_speed), 'player.y_speed', str(player.y_speed))
     # --- Drawing code should go here
     all_sprites_list.draw(screen)
     # --- Go ahead and update the screen with what we've drawn.
