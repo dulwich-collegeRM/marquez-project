@@ -167,42 +167,107 @@ class Floor(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-class AdjNode: 
-    def __init__(self, data): 
-        self.vertex = data 
-        self.next = None
-  
-  
-# A class to represent a graph. A graph 
-# is the list of the adjacency lists. 
-# Size of the array will be the no. of the 
-# vertices "V" 
 class Graph: 
-    def __init__(self, vertices): 
-        self.V = vertices 
-        self.graph = [None] * self.V 
+    def __init__(self, V): 
+        self.V = V  
+        self.adj = [[] for i in range(V)] 
   
-    # Function to add an edge in an undirected graph 
-    def add_edge(self, src, dest): 
-        # Adding the node to the source node 
-        node = AdjNode(dest) 
-        node.next = self.graph[src] 
-        self.graph[src] = node 
+    # add edge to graph  
+    def addEdge (self, s , d ): 
+        self.adj[s].append(d)  
+        self.adj[d].append(s) 
+      
+    # Level BFS function to find minimum  
+    # path from source to sink  
+    def BFS(self, s, d): 
+          
+        # Base case  
+        if (s == d):  
+            return 0
+      
+        # make initial distance of all  
+        # vertex -1 from source  
+        level = [-1] * self.V 
+      
+        # Create a queue for BFS  
+        queue = [] 
+      
+        # Mark the source node level[s] = '0'  
+        level[s] = 0
+        queue.append(s)  
+      
+        # it will be used to get all adjacent  
+        # vertices of a vertex  
+      
+        while (len(queue) != 0): 
+              
+            # Dequeue a vertex from queue  
+            s = queue.pop()  
+      
+            # Get all adjacent vertices of the  
+            # dequeued vertex s. If a adjacent has  
+            # not been visited ( level[i] < '0') ,  
+            # then update level[i] == parent_level[s] + 1  
+            # and enqueue it  
+            i = 0
+            while i < len(self.adj[s]): 
+                  
+                # Else, continue to do BFS  
+                if (level[self.adj[s][i]] < 0 or 
+                    level[self.adj[s][i]] > level[s] + 1 ): 
+                    level[self.adj[s][i]] = level[s] + 1
+                    queue.append(self.adj[s][i]) 
+                i += 1
+      
+        # return minimum moves from source 
+        # to sink  
+        return level[d] 
   
-        # Adding the source node to the destination as 
-        # it is the undirected graph 
-        node = AdjNode(src) 
-        node.next = self.graph[dest] 
-        self.graph[dest] = node 
-
-    def print_graph(self): 
-        for i in range(self.V): 
-            print("Adjacency list of vertex {}\n head".format(i), end="") 
-            temp = self.graph[i] 
-            while temp: 
-                print(" -> {}".format(temp.vertex), end="") 
-                temp = temp.next
-            print(" \n") 
+def isSafe(i, j, M): 
+    global N 
+    if ((i < 0 or i >= N) or
+        (j < 0 or j >= N ) or M[i][j] == 0):  
+        return False
+    return True
+  
+# Returns minimum numbers of moves from a  
+# source (a cell with value 1) to a destination  
+# (a cell with value 2)  
+def MinimumPath(M): 
+    global N 
+    s , d = None, None # source and destination  
+    V = N * N + 2
+    g = Graph(V)  
+  
+    # create graph with n*n node  
+    # each cell consider as node  
+    k = 1 # Number of current vertex 
+    for i in range(N): 
+        for j in range(N): 
+            if (M[i][j] != 0): 
+                  
+                # connect all 4 adjacent cell to  
+                # current cell  
+                if (isSafe (i , j + 1 , M)):  
+                    g.addEdge (k , k + 1) 
+                if (isSafe (i , j - 1 , M)): 
+                    g.addEdge (k , k - 1)  
+                if (j < N - 1 and isSafe (i + 1 , j , M)):  
+                    g.addEdge (k , k + N)  
+                if (i > 0 and isSafe (i - 1 , j , M)):  
+                    g.addEdge (k , k - N) 
+  
+            # source index  
+            if(M[i][j] == 1): 
+                s = k  
+  
+            # destination index  
+            if (M[i][j] == 2):  
+                d = k  
+            k += 1
+  
+    # find minimum moves  
+    return g.BFS (s, d) 
 
 
 block_array = []
@@ -714,6 +779,7 @@ def block_replace(x, y):
     all_sprites_list.add(maze_array[x][y])
 
 
+
 def maze_initiate():
 
     for x in range(20):
@@ -1062,17 +1128,17 @@ enemy = Enemy()
 
 player = Player(BLUE, 100, 100)
 
-##def ai_movement():
-##
-##        player_floor_x_pos = player.rect.x // 40
-##        player_floor_y_pos = player.rect.y // 40
-##        
-##        enemy_floor_x_pos = enemy.rect.x // 40
-##        enemy_floor_y_pos = enemy.rect.y // 40
+
+
+def ai_movement():
+
+        player_floor_x_pos = player.rect.x // 40
+        player_floor_y_pos = player.rect.y % 40
+        
+        enemy_floor_x_pos = enemy.rect.x // 40
+        enemy_floor_y_pos = enemy.rect.y % 40
 
         
-
-
         
 
 all_sprites_list.add(enemy)
