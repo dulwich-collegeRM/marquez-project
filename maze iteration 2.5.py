@@ -174,15 +174,14 @@ class Graph:
   
     # add edge to graph  
     def addEdge (self, s , d ): 
-        self.adj[s].append(d)  
-        self.adj[d].append(s) 
+        self.adj[s].append(d) 
       
     # Level BFS function to find minimum  
     # path from source to sink  
-    def BFS(self, s, d): 
+    def BFS(self, enemy_x, enemy_y, player_x, player_y): 
           
         # Base case  
-        if (s == d):  
+        if (enemy == player):  
             return 0
       
         # make initial distance of all  
@@ -193,8 +192,8 @@ class Graph:
         queue = [] 
       
         # Mark the source node level[s] = '0'  
-        level[s] = 0
-        queue.append(s)  
+        level[enemy] = 0
+        queue.append(enemy)  
       
         # it will be used to get all adjacent  
         # vertices of a vertex  
@@ -202,7 +201,7 @@ class Graph:
         while (len(queue) != 0): 
               
             # Dequeue a vertex from queue  
-            s = queue.pop()  
+            enemy = queue.pop()  
       
             # Get all adjacent vertices of the  
             # dequeued vertex s. If a adjacent has  
@@ -210,64 +209,27 @@ class Graph:
             # then update level[i] == parent_level[s] + 1  
             # and enqueue it  
             i = 0
-            while i < len(self.adj[s]): 
+            while i < len(self.adj[enemy]): 
                   
                 # Else, continue to do BFS  
-                if (level[self.adj[s][i]] < 0 or 
-                    level[self.adj[s][i]] > level[s] + 1 ): 
-                    level[self.adj[s][i]] = level[s] + 1
-                    queue.append(self.adj[s][i]) 
+                if (level[self.adj[enemy][i]] < 0 or 
+                    level[self.adj[enemy][i]] > level[enemy] + 1 ): 
+                    level[self.adj[enemy][i]] = level[enemy] + 1
+                    queue.append(self.adj[enemy][i]) 
                 i += 1
       
         # return minimum moves from source 
         # to sink  
         return level[d] 
   
-def isSafe(i, j, M): 
-    global N 
-    if ((i < 0 or i >= N) or
-        (j < 0 or j >= N ) or M[i][j] == 0):  
+def isFloor(pos):
+    if isinstance(maze_array[pos // 20][pos % 20], Floor) == True:
+        return True
+    else:
         return False
-    return True
+        
   
-# Returns minimum numbers of moves from a  
-# source (a cell with value 1) to a destination  
-# (a cell with value 2)  
-def MinimumPath(M): 
-    global N 
-    s , d = None, None # source and destination  
-    V = N * N + 2
-    g = Graph(V)  
-  
-    # create graph with n*n node  
-    # each cell consider as node  
-    k = 1 # Number of current vertex 
-    for i in range(N): 
-        for j in range(N): 
-            if (M[i][j] != 0): 
-                  
-                # connect all 4 adjacent cell to  
-                # current cell  
-                if (isSafe (i , j + 1 , M)):  
-                    g.addEdge (k , k + 1) 
-                if (isSafe (i , j - 1 , M)): 
-                    g.addEdge (k , k - 1)  
-                if (j < N - 1 and isSafe (i + 1 , j , M)):  
-                    g.addEdge (k , k + N)  
-                if (i > 0 and isSafe (i - 1 , j , M)):  
-                    g.addEdge (k , k - N) 
-  
-            # source index  
-            if(M[i][j] == 1): 
-                s = k  
-  
-            # destination index  
-            if (M[i][j] == 2):  
-                d = k  
-            k += 1
-  
-    # find minimum moves  
-    return g.BFS (s, d) 
+
 
 
 block_array = []
@@ -324,449 +286,6 @@ floor_array = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
 floor_graph =  Graph(400)
 floor_pos_list = []
 
-##path_array = [["AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN", "AO", "AP", "AQ", "AR", "AS", "AT"],
-##              ["BA", "BB", "BC", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BK", "BL", "BM", "BN", "BO", "BP", "BQ", "BR", "BS", "BT"],
-##              ["CA", "CB", "CC", "CD", "CE", "CF", "CG", "CH", "CI", "CJ", "CK", "CL", "CM", "CN", "CO", "CP", "CQ", "CR", "CS", "CT"],
-##              ["DA", "DB", "DC", "DD", "DE", "DF", "DG", "DH", "DI", "DJ", "DK", "DL", "DM", "DN", "DO", "DP", "DQ", "DR", "DS", "DT"],
-##              ["EA", "EB", "EC", "ED", "EE", "EF", "EG", "EH", "EI", "EJ", "EK", "EL", "EM", "EN", "EO", "EP", "EQ", "ER", "ES", "ET"],
-##              ["FA", "FB", "FC", "FD", "FE", "FF", "FG", "FH", "FI", "FJ", "FK", "FL", "FM", "FN", "FO", "FP", "FQ", "FR", "FS", "FT"],
-##              ["GA", "GB", "GC", "GD", "GE", "GF", "GG", "GH", "GI", "GJ", "GK", "GL", "GM", "GN", "GO", "GP", "GQ", "GR", "GS", "GT"],
-##              ["HA", "HB", "HC", "HD", "HE", "HF", "HG", "HH", "HI", "HJ", "HK", "HL", "HM", "HN", "HO", "HP", "HQ", "HR", "HS", "HT"],
-##              ["IA", "IB", "IC", "ID", "IE", "IF", "IG", "IH", "II", "IJ", "IK", "IL", "IM", "IN", "IO", "IP", "IQ", "IR", "IS", "IT"],
-##              ["JA", "JB", "JC", "JD", "JE", "JF", "JG", "JH", "JI", "JJ", "JK", "JL", "JM", "JN", "JO", "JP", "JQ", "JR", "JS", "JT"],
-##              ["KA", "KB", "KC", "KD", "KE", "KF", "KG", "KH", "KI", "KJ", "KK", "KL", "KM", "KN", "KO", "KP", "KQ", "KR", "KS", "KT"],
-##              ["LA", "LB", "LC", "LD", "LE", "LF", "LG", "LH", "LI", "LJ", "LK", "LL", "LM", "LN", "LO", "LP", "LQ", "LR", "LS", "LT"],
-##              ["MA", "MB", "MC", "MD", "ME", "MF", "MG", "MH", "MI", "MJ", "MK", "ML", "MM", "MN", "MO", "MP", "MQ", "MR", "MS", "MT"],
-##              ["NA", "NB", "NC", "ND", "NE", "NF", "NG", "NH", "NI", "NJ", "NK", "NL", "NM", "NN", "NO", "NP", "NQ", "NR", "NS", "NT"],
-##              ["OA", "OB", "OC", "OD", "OE", "OF", "OG", "OH", "OI", "OJ", "OK", "OL", "OM", "ON", "OO", "OP", "OQ", "OR", "OS", "OT"],
-##              ["PA", "PB", "PC", "PD", "PE", "PF", "PG", "PH", "PI", "PJ", "PK", "PL", "PM", "PN", "PO", "PP", "PQ", "PR", "PS", "PT"],
-##              ["QA", "QB", "QC", "QD", "QE", "QF", "QG", "QH", "QI", "QJ", "QK", "QL", "QM", "QN", "QO", "QP", "QQ", "QR", "QS", "QT"],
-##              ["RA", "RB", "RC", "RD", "RE", "RF", "RG", "RH", "RI", "RJ", "RK", "RL", "RM", "RN", "RO", "RP", "RQ", "RR", "RS", "RT"],
-##              ["SA", "SB", "SC", "SD", "SE", "SF", "SG", "SH", "SI", "SJ", "SK", "SL", "SM", "SN", "SO", "SP", "SQ", "SR", "SS", "ST"],
-##              ["TA", "TB", "TC", "TD", "TE", "TF", "TG", "TH", "TI", "TJ", "TK", "TL", "TM", "TN", "TO", "TP", "TQ", "TR", "TS", "TT"]]
-##              
-##
-##floor_graph = { path_array[0][0]: [],
-##                path_array[1][0]: [],
-##                   path_array[2][0]: [],
-##                   path_array[3][0]: [],
-##                   path_array[4][0]: [],
-##                   path_array[5][0]: [],
-##                   path_array[6][0]: [],
-##                   path_array[7][0]: [],
-##                   path_array[8][0]: [],
-##                   path_array[9][0]: [],
-##                   path_array[10][0]: [],
-##                   path_array[11][0]: [],
-##                   path_array[12][0]: [],
-##                   path_array[13][0]: [],
-##                   path_array[14][0]: [],
-##                   path_array[15][0]: [],
-##                   path_array[16][0]: [],
-##                   path_array[17][0]: [],
-##                   path_array[18][0]: [],
-##                   path_array[19][0]: [],
-##                   
-##                   path_array[0][1]: [],
-##                   path_array[1][1]: [],
-##                   path_array[2][1]: [],
-##                   path_array[3][1]: [],
-##                   path_array[4][1]: [],
-##                   path_array[5][1]: [],
-##                   path_array[6][1]: [],
-##                   path_array[7][1]: [],
-##                   path_array[8][1]: [],
-##                   path_array[9][1]: [],
-##                   path_array[10][1]: [],
-##                   path_array[11][1]: [],
-##                   path_array[12][1]: [],
-##                   path_array[13][1]: [],
-##                   path_array[14][1]: [],
-##                   path_array[15][1]: [],
-##                   path_array[16][1]: [],
-##                   path_array[17][1]: [],
-##                   path_array[18][1]: [],
-##                   path_array[19][1]: [],
-##                   
-##                   path_array[0][2]: [],
-##                   path_array[1][2]: [],
-##                   path_array[2][2]: [],
-##                   path_array[3][2]: [],
-##                   path_array[4][2]: [],
-##                   path_array[5][2]: [],
-##                   path_array[6][2]: [],
-##                   path_array[7][2]: [],
-##                   path_array[8][2]: [],
-##                   path_array[9][2]: [],
-##                   path_array[10][2]: [],
-##                   path_array[11][2]: [],
-##                   path_array[12][2]: [],
-##                   path_array[13][2]: [],
-##                   path_array[14][2]: [],
-##                   path_array[15][2]: [],
-##                   path_array[16][2]: [],
-##                   path_array[17][2]: [],
-##                   path_array[18][2]: [],
-##                   path_array[19][2]: [],
-##
-##
-##                   path_array[0][3]: [],
-##                   path_array[1][3]: [],
-##                   path_array[2][3]: [],
-##                   path_array[3][3]: [],
-##                   path_array[4][3]: [],
-##                   path_array[5][3]: [],
-##                   path_array[6][3]: [],
-##                   path_array[7][3]: [],
-##                   path_array[8][3]: [],
-##                   path_array[9][3]: [],
-##                   path_array[10][3]: [],
-##                   path_array[11][3]: [],
-##                   path_array[12][3]: [],
-##                   path_array[13][3]: [],
-##                   path_array[14][3]: [],
-##                   path_array[15][3]: [],
-##                   path_array[16][3]: [],
-##                   path_array[17][3]: [],
-##                   path_array[18][3]: [],
-##                   path_array[19][3]: [],
-##
-##                   path_array[0][4]: [],
-##                   path_array[1][4]: [],
-##                   path_array[2][4]: [],
-##                   path_array[3][4]: [],
-##                   path_array[4][4]: [],
-##                   path_array[5][4]: [],
-##                   path_array[6][4]: [],
-##                   path_array[7][4]: [],
-##                   path_array[8][4]: [],
-##                   path_array[9][4]: [],
-##                   path_array[10][4]: [],
-##                   path_array[11][4]: [],
-##                   path_array[12][4]: [],
-##                   path_array[13][4]: [],
-##                   path_array[14][4]: [],
-##                   path_array[15][4]: [],
-##                   path_array[16][4]: [],
-##                   path_array[17][4]: [],
-##                   path_array[18][4]: [],
-##                   path_array[19][4]: [],
-##                   
-##                   path_array[0][5]: [],
-##                   path_array[1][5]: [],
-##                   path_array[2][5]: [],
-##                   path_array[3][5]: [],
-##                   path_array[4][5]: [],
-##                   path_array[5][5]: [],
-##                   path_array[6][5]: [],
-##                   path_array[7][5]: [],
-##                   path_array[8][5]: [],
-##                   path_array[9][5]: [],
-##                   path_array[10][5]: [],
-##                   path_array[11][5]: [],
-##                   path_array[12][5]: [],
-##                   path_array[13][5]: [],
-##                   path_array[14][5]: [],
-##                   path_array[15][5]: [],
-##                   path_array[16][5]: [],
-##                   path_array[17][5]: [],
-##                   path_array[18][5]: [],
-##                   path_array[19][5]: [],
-##
-##                   path_array[0][6]: [],
-##                   path_array[1][6]: [],
-##                   path_array[2][6]: [],
-##                   path_array[3][6]: [],
-##                   path_array[4][6]: [],
-##                   path_array[5][6]: [],
-##                   path_array[6][6]: [],
-##                   path_array[7][6]: [],
-##                   path_array[8][6]: [],
-##                   path_array[9][6]: [],
-##                   path_array[10][6]: [],
-##                   path_array[11][6]: [],
-##                   path_array[12][6]: [],
-##                   path_array[13][6]: [],
-##                   path_array[14][6]: [],
-##                   path_array[15][6]: [],
-##                   path_array[16][6]: [],
-##                   path_array[17][6]: [],
-##                   path_array[18][6]: [],
-##                   path_array[19][6]: [],
-##
-##                   path_array[0][7]: [],
-##                   path_array[1][7]: [],
-##                   path_array[2][7]: [],
-##                   path_array[3][7]: [],
-##                   path_array[4][7]: [],
-##                   path_array[5][7]: [],
-##                   path_array[6][7]: [],
-##                   path_array[7][7]: [],
-##                   path_array[8][7]: [],
-##                   path_array[9][7]: [],
-##                   path_array[10][7]: [],
-##                   path_array[11][7]: [],
-##                   path_array[12][7]: [],
-##                   path_array[13][7]: [],
-##                   path_array[14][7]: [],
-##                   path_array[15][7]: [],
-##                   path_array[16][7]: [],
-##                   path_array[17][7]: [],
-##                   path_array[18][7]: [],
-##                   path_array[19][7]: [],
-##
-##                   path_array[0][8]: [],
-##                   path_array[1][8]: [],
-##                   path_array[2][8]: [],
-##                   path_array[3][8]: [],
-##                   path_array[4][8]: [],
-##                   path_array[5][8]: [],
-##                   path_array[6][8]: [],
-##                   path_array[7][8]: [],
-##                   path_array[8][8]: [],
-##                   path_array[9][8]: [],
-##                   path_array[10][8]: [],
-##                   path_array[11][8]: [],
-##                   path_array[12][8]: [],
-##                   path_array[13][8]: [],
-##                   path_array[14][8]: [],
-##                   path_array[15][8]: [],
-##                   path_array[16][8]: [],
-##                   path_array[17][8]: [],
-##                   path_array[18][8]: [],
-##                   path_array[19][8]: [],
-##
-##                   path_array[0][9]: [],
-##                   path_array[1][9]: [],
-##                   path_array[2][9]: [],
-##                   path_array[3][9]: [],
-##                   path_array[4][9]: [],
-##                   path_array[5][9]: [],
-##                   path_array[6][9]: [],
-##                   path_array[7][9]: [],
-##                   path_array[8][9]: [],
-##                   path_array[9][9]: [],
-##                   path_array[10][9]: [],
-##                   path_array[11][9]: [],
-##                   path_array[12][9]: [],
-##                   path_array[13][9]: [],
-##                   path_array[14][9]: [],
-##                   path_array[15][9]: [],
-##                   path_array[16][9]: [],
-##                   path_array[17][9]: [],
-##                   path_array[18][9]: [],
-##                   path_array[19][9]: [],
-##
-##                   path_array[0][10]: [],
-##                   path_array[1][10]: [],
-##                   path_array[2][10]: [],
-##                   path_array[3][10]: [],
-##                   path_array[4][10]: [],
-##                   path_array[5][10]: [],
-##                   path_array[6][10]: [],
-##                   path_array[7][10]: [],
-##                   path_array[8][10]: [],
-##                   path_array[9][10]: [],
-##                   path_array[10][10]: [],
-##                   path_array[11][10]: [],
-##                   path_array[12][10]: [],
-##                   path_array[13][10]: [],
-##                   path_array[14][10]: [],
-##                   path_array[15][10]: [],
-##                   path_array[16][10]: [],
-##                   path_array[17][10]: [],
-##                   path_array[18][10]: [],
-##                   path_array[19][10]: [],
-##
-##                   path_array[0][11]: [],
-##                   path_array[1][11]: [],
-##                   path_array[2][11]: [],
-##                   path_array[3][11]: [],
-##                   path_array[4][11]: [],
-##                   path_array[5][11]: [],
-##                   path_array[6][11]: [],
-##                   path_array[7][11]: [],
-##                   path_array[8][11]: [],
-##                   path_array[9][11]: [],
-##                   path_array[10][11]: [],
-##                   path_array[11][11]: [],
-##                   path_array[12][11]: [],
-##                   path_array[13][11]: [],
-##                   path_array[14][11]: [],
-##                   path_array[15][11]: [],
-##                   path_array[16][11]: [],
-##                   path_array[17][11]: [],
-##                   path_array[18][11]: [],
-##                   path_array[19][11]: [],
-##
-##                   path_array[0][12]: [],
-##                   path_array[1][12]: [],
-##                   path_array[2][12]: [],
-##                   path_array[3][12]: [],
-##                   path_array[4][12]: [],
-##                   path_array[5][12]: [],
-##                   path_array[6][12]: [],
-##                   path_array[7][12]: [],
-##                   path_array[8][12]: [],
-##                   path_array[9][12]: [],
-##                   path_array[10][12]: [],
-##                   path_array[11][12]: [],
-##                   path_array[12][12]: [],
-##                   path_array[13][12]: [],
-##                   path_array[14][12]: [],
-##                   path_array[15][12]: [],
-##                   path_array[16][12]: [],
-##                   path_array[17][12]: [],
-##                   path_array[18][12]: [],
-##                   path_array[19][12]: [],
-##
-##                   path_array[0][13]: [],
-##                   path_array[1][13]: [],
-##                   path_array[2][13]: [],
-##                   path_array[3][13]: [],
-##                   path_array[4][13]: [],
-##                   path_array[5][13]: [],
-##                   path_array[6][13]: [],
-##                   path_array[7][13]: [],
-##                   path_array[8][13]: [],
-##                   path_array[9][13]: [],
-##                   path_array[10][13]: [],
-##                   path_array[11][13]: [],
-##                   path_array[12][13]: [],
-##                   path_array[13][13]: [],
-##                   path_array[14][13]: [],
-##                   path_array[15][13]: [],
-##                   path_array[16][13]: [],
-##                   path_array[17][13]: [],
-##                   path_array[18][13]: [],
-##                   path_array[19][13]: [],
-##
-##                   path_array[0][14]: [],
-##                   path_array[1][14]: [],
-##                   path_array[2][14]: [],
-##                   path_array[3][14]: [],
-##                   path_array[4][14]: [],
-##                   path_array[5][14]: [],
-##                   path_array[6][14]: [],
-##                   path_array[7][14]: [],
-##                   path_array[8][14]: [],
-##                   path_array[9][14]: [],
-##                   path_array[10][14]: [],
-##                   path_array[11][14]: [],
-##                   path_array[12][14]: [],
-##                   path_array[13][14]: [],
-##                   path_array[14][14]: [],
-##                   path_array[15][14]: [],
-##                   path_array[16][14]: [],
-##                   path_array[17][14]: [],
-##                   path_array[18][14]: [],
-##                   path_array[19][14]: [],
-##
-##                   path_array[0][15]: [],
-##                   path_array[1][15]: [],
-##                   path_array[2][15]: [],
-##                   path_array[3][15]: [],
-##                   path_array[4][15]: [],
-##                   path_array[5][15]: [],
-##                   path_array[6][15]: [],
-##                   path_array[7][15]: [],
-##                   path_array[8][15]: [],
-##                   path_array[9][15]: [],
-##                   path_array[10][15]: [],
-##                   path_array[11][15]: [],
-##                   path_array[12][15]: [],
-##                   path_array[13][15]: [],
-##                   path_array[14][15]: [],
-##                   path_array[15][15]: [],
-##                   path_array[16][15]: [],
-##                   path_array[17][15]: [],
-##                   path_array[18][15]: [],
-##                   path_array[19][15]: [],
-##
-##                   path_array[0][16]: [],
-##                   path_array[1][16]: [],
-##                   path_array[2][16]: [],
-##                   path_array[3][16]: [],
-##                   path_array[4][16]: [],
-##                   path_array[5][16]: [],
-##                   path_array[6][16]: [],
-##                   path_array[7][16]: [],
-##                   path_array[8][16]: [],
-##                   path_array[9][16]: [],
-##                   path_array[10][16]: [],
-##                   path_array[11][16]: [],
-##                   path_array[12][16]: [],
-##                   path_array[13][16]: [],
-##                   path_array[14][16]: [],
-##                   path_array[15][16]: [],
-##                   path_array[16][16]: [],
-##                   path_array[17][16]: [],
-##                   path_array[18][16]: [],
-##                   path_array[19][16]: [],
-##
-##                   path_array[0][17]: [],
-##                   path_array[1][17]: [],
-##                   path_array[2][17]: [],
-##                   path_array[3][17]: [],
-##                   path_array[4][17]: [],
-##                   path_array[5][17]: [],
-##                   path_array[6][17]: [],
-##                   path_array[7][17]: [],
-##                   path_array[8][17]: [],
-##                   path_array[9][17]: [],
-##                   path_array[10][17]: [],
-##                   path_array[11][17]: [],
-##                   path_array[12][17]: [],
-##                   path_array[13][17]: [],
-##                   path_array[14][17]: [],
-##                   path_array[15][17]: [],
-##                   path_array[16][17]: [],
-##                   path_array[17][17]: [],
-##                   path_array[18][17]: [],
-##                   path_array[19][17]: [],
-##
-##                   path_array[0][18]: [],
-##                   path_array[1][18]: [],
-##                   path_array[2][18]: [],
-##                   path_array[3][18]: [],
-##                   path_array[4][18]: [],
-##                   path_array[5][18]: [],
-##                   path_array[6][18]: [],
-##                   path_array[7][18]: [],
-##                   path_array[8][18]: [],
-##                   path_array[9][18]: [],
-##                   path_array[10][18]: [],
-##                   path_array[11][18]: [],
-##                   path_array[12][18]: [],
-##                   path_array[13][18]: [],
-##                   path_array[14][18]: [],
-##                   path_array[15][18]: [],
-##                   path_array[16][18]: [],
-##                   path_array[17][18]: [],
-##                   path_array[18][18]: [],
-##                   path_array[19][18]: [],
-##
-##                   path_array[0][19]: [],
-##                   path_array[1][19]: [],
-##                   path_array[2][19]: [],
-##                   path_array[3][19]: [],
-##                   path_array[4][19]: [],
-##                   path_array[5][19]: [],
-##                   path_array[6][19]: [],
-##                   path_array[7][19]: [],
-##                   path_array[8][19]: [],
-##                   path_array[9][19]: [],
-##                   path_array[10][19]: [],
-##                   path_array[11][19]: [],
-##                   path_array[12][19]: [],
-##                   path_array[13][19]: [],
-##                   path_array[14][19]: [],
-##                   path_array[15][19]: [],
-##                   path_array[16][19]: [],
-##                   path_array[17][19]: [],
-##                   path_array[18][19]: [],
-##                   path_array[19][19]: []
-##                }
 
 
 def block_replace(x, y):
@@ -1106,23 +625,21 @@ def graph_edge_connection():
             if x_pos_floor != other_floor:
                 if (x_pos_floor == other_floor_x + 1 or x_pos_floor == other_floor_x - 1) and y_pos_floor == other_floor_y:
                     if x_pos_floor == other_floor_x + 1:
-                        floor_graph.add_edge(floor, other_floor)
+                        floor_graph.addEdge(floor, other_floor)
                     if x_pos_floor == other_floor_x - 1:
-                        floor_graph.add_edge(floor, other_floor)
+                        floor_graph.addEdge(floor, other_floor)
             if y_pos_floor != other_floor:
                 if ( y_pos_floor == other_floor_y + 1 or y_pos_floor == other_floor_y - 1 ) and x_pos_floor == other_floor_x:
                     if y_pos_floor == other_floor_y + 1:
-                        floor_graph.add_edge(floor, other_floor)
+                        floor_graph.addEdge(floor, other_floor)
                     if y_pos_floor == other_floor_y - 1:
-                        floor_graph.add_edge(floor, other_floor)
+                        floor_graph.addEdge(floor, other_floor)
     
 
 
 
 maze_initiate()
 graph_edge_connection()                 
-
-floor_graph.print_graph()
 
 enemy = Enemy()
 
@@ -1137,6 +654,8 @@ def ai_movement():
         
         enemy_floor_x_pos = enemy.rect.x // 40
         enemy_floor_y_pos = enemy.rect.y % 40
+        
+        BFS(self, enemy_floor_x_pos, enemy_floor_y_pos, player_floor_x_pos, player_floor_y_pos)
 
         
         
