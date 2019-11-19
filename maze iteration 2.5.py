@@ -86,7 +86,7 @@ class Enemy(pygame.sprite.Sprite):
     x_speed = 0
     y_speed = 0
     
-    def __init__(self):
+    def __init__(self, x, y):
         super().__init__()
         self.image = pygame.Surface([20,20])
         self.image.fill(WHITE)
@@ -95,14 +95,25 @@ class Enemy(pygame.sprite.Sprite):
         pygame.draw.rect(self.image, RED, [0, 0, 20, 20])
 
         self.rect = self.image.get_rect()
-        self.rect.x = 0
-        self.rect.y = 100
+        self.rect.x = x
+        self.rect.y = y
         self.blocks = None
         self.floors = None
 
 
 
-##    def control(self):
+    def control(self, player_x, player_y):
+        if player_x > self.rect.x:
+            self.x_speed = 1
+        elif player_x < self.rect.x:
+            self.x_speed = -1
+        if player_y > self.rect.y:
+            self.y_speed = 1
+        elif player_y < self.rect.y:
+            self.y_speed = -1
+
+##        self.x_speed += x
+##        self.y_speed += y
 
 
         
@@ -167,67 +178,68 @@ class Floor(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-class Graph: 
+class Graph:
+    #distance = None
     def __init__(self, V): 
         self.V = V  
-        self.adj = [[] for i in range(V)] 
+        self.adj = [[] for i in range(V)]
+        self.distance = [[1000000000000] for i in range(V)]
+        self.prev = [[] for i in range(V)]
   
     # add edge to graph  
     def addEdge (self, s , d ): 
-        self.adj[s].append(d) 
+        self.adj[s].append(d)
+        self.distance[s] = 1000000
+        
       
-    # Level BFS function to find minimum  
-    # path from source to sink  
-    def BFS(self, enemy_x, enemy_y, player_x, player_y): 
-          
-        # Base case  
-        if (enemy == player):  
-            return 0
-      
-        # make initial distance of all  
-        # vertex -1 from source  
-        level = [-1] * self.V 
-      
-        # Create a queue for BFS  
-        queue = [] 
-      
-        # Mark the source node level[s] = '0'  
-        level[enemy] = 0
-        queue.append(enemy)  
-      
-        # it will be used to get all adjacent  
-        # vertices of a vertex  
-      
-        while (len(queue) != 0): 
-              
-            # Dequeue a vertex from queue  
-            enemy = queue.pop()  
-      
-            # Get all adjacent vertices of the  
-            # dequeued vertex s. If a adjacent has  
-            # not been visited ( level[i] < '0') ,  
-            # then update level[i] == parent_level[s] + 1  
-            # and enqueue it  
-            i = 0
-            while i < len(self.adj[enemy]): 
-                  
-                # Else, continue to do BFS  
-                if (level[self.adj[enemy][i]] < 0 or 
-                    level[self.adj[enemy][i]] > level[enemy] + 1 ): 
-                    level[self.adj[enemy][i]] = level[enemy] + 1
-                    queue.append(self.adj[enemy][i]) 
-                i += 1
-      
-        # return minimum moves from source 
-        # to sink  
-        return level[d] 
+
+    def dijsktra_algorithm(self, player, enemy):
+        dist_f_src = 0
+        node_c = 0
+        Q = []
+        graph = []
+        distance_f_src = 100000000000
+        for v in range(self.V):
+            if self.distance[v] == 1000000:
+                graph.append(v)
+
+        for r in graph:
+            
+            self.prev[r] = None
+            Q.append(r)
+        self.distance[enemy] = 0
+        while len(Q) != 0:
+            
+            for i in graph:
+                x = self.distance[i]
+                if x < dist_f_src:
+                    dist_f_src = x
+                    node_c = i
+            Q.remove(node_c)
+            for i in self.adj[node_c]:
+                if i in Q:
+                    dist_from_enemy = self.distance[node_c] + 1
+
+                if dist_from_enemy < self.distance[i]:
+                    self.distance[i] = dist_from_enemy
+                    self.prev[i] = node_c
+            
+                
+                
+        
+
+        
+        
+
   
 def isFloor(pos):
     if isinstance(maze_array[pos // 20][pos % 20], Floor) == True:
         return True
     else:
         return False
-        
+
+
+    
   
 
 
@@ -263,7 +275,7 @@ maze_array = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
               [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,]]
 
 floor_array = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
-              [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 13, 14, 15, 16, 17, 18, 19,],
+              [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,],
               [40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59,],
               [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79,],
               [80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99,],
@@ -283,7 +295,7 @@ floor_array = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
               [360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379,],
               [380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399,]]
 
-floor_graph =  Graph(400)
+
 floor_pos_list = []
 
 
@@ -616,6 +628,12 @@ def maze_initiate():
 
 
 def graph_edge_connection():
+    n = 0
+    for floor in floor_pos_list:
+        n = n + 1
+
+    
+    
     for floor in floor_pos_list:
         y_pos_floor = floor // 20
         x_pos_floor = floor % 20
@@ -634,32 +652,51 @@ def graph_edge_connection():
                         floor_graph.addEdge(floor, other_floor)
                     if y_pos_floor == other_floor_y - 1:
                         floor_graph.addEdge(floor, other_floor)
-    
 
 
+
+floor_graph =  Graph(400)
 
 maze_initiate()
-graph_edge_connection()                 
+graph_edge_connection()
 
-enemy = Enemy()
 
-player = Player(BLUE, 100, 100)
+def spawn_player():    
+    random_player = random.choice(floor_pos_list)
+
+    return random_player
+
+def spawn_enemy():
+    random_enemy = random.choice(floor_pos_list)
+
+    return random_enemy
+
+
+
+
 
 
 
 def ai_movement():
 
         player_floor_x_pos = player.rect.x // 40
-        player_floor_y_pos = player.rect.y % 40
+        player_floor_y_pos = player.rect.y // 40
+        
+        player_pos = player.rect.x + (player.rect.y * 800)
         
         enemy_floor_x_pos = enemy.rect.x // 40
-        enemy_floor_y_pos = enemy.rect.y % 40
+        enemy_floor_y_pos = enemy.rect.y // 40
         
-        BFS(self, enemy_floor_x_pos, enemy_floor_y_pos, player_floor_x_pos, player_floor_y_pos)
+        enemy_pos = enemy.rect.x + (enemy.rect.y * 800)
+        enemy.control(player.rect.x, player.rect.y)
+        
+        #floor_graph.dijsktra_algorithm(floor_array[player_floor_x_pos][player_floor_y_pos], floor_array[enemy_floor_x_pos][enemy_floor_y_pos])
 
         
         
 
+player = Player(BLUE,(spawn_player() // 20) * 40, (spawn_player() % 20) * 40)
+enemy = Enemy(((spawn_enemy() // 20) * 40), ((spawn_enemy() % 20) * 40) )
 all_sprites_list.add(enemy)
 all_sprites_list.add(player)
 
@@ -704,6 +741,7 @@ while not done:
 
 
     # --- Game logic should go here
+    ai_movement()
     
 
     
