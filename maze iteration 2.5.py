@@ -27,7 +27,6 @@ class Player(pygame.sprite.Sprite):
     
     x_speed = 0
     y_speed = 0
-    lives = 3
 
 #sets the movement and life attributes of the player
 
@@ -193,36 +192,9 @@ class Graph:
         
       
 
-    def dijsktra_algorithm(self, player, enemy):
-        dist_f_src = 0
-        node_c = 0
-        Q = []
-        graph = []
-        distance_f_src = 100000000000
-        for v in range(self.V):
-            if self.distance[v] == 1000000:
-                graph.append(v)
+#    def dijsktra_algorithm(self, player, enemy):
 
-        for r in graph:
-            
-            self.prev[r] = None
-            Q.append(r)
-        self.distance[enemy] = 0
-        while len(Q) != 0:
-            
-            for i in graph:
-                x = self.distance[i]
-                if x < dist_f_src:
-                    dist_f_src = x
-                    node_c = i
-            Q.remove(node_c)
-            for i in self.adj[node_c]:
-                if i in Q:
-                    dist_from_enemy = self.distance[node_c] + 1
-
-                if dist_from_enemy < self.distance[i]:
-                    self.distance[i] = dist_from_enemy
-                    self.prev[i] = node_c
+        
             
                 
                 
@@ -252,6 +224,8 @@ all_sprites_list = pygame.sprite.Group()
 
 block_sprite_list = pygame.sprite.Group()
 floor_sprite_list = pygame.sprite.Group()
+
+graph_array = []
 
 maze_array = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
               [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
@@ -627,38 +601,36 @@ def maze_initiate():
 
 
 
-def graph_edge_connection():
-    n = 0
-    for floor in floor_pos_list:
-        n = n + 1
-
+def graph_generation():
     
-    
-    for floor in floor_pos_list:
+    floor_graph = Graph(len(floor_pos_list))
+    for i in range(len(floor_pos_list)-1) :
+        floor = floor_pos_list[i]
+        #print(floor)
         y_pos_floor = floor // 20
         x_pos_floor = floor % 20
-        for other_floor in floor_pos_list:
+        for n in range(len(floor_pos_list)-1):
+            other_floor = floor_pos_list[n]
+            #print(" ", str(other_floor))
             other_floor_y = other_floor // 20
             other_floor_x = other_floor % 20
             if x_pos_floor != other_floor:
                 if (x_pos_floor == other_floor_x + 1 or x_pos_floor == other_floor_x - 1) and y_pos_floor == other_floor_y:
                     if x_pos_floor == other_floor_x + 1:
-                        floor_graph.addEdge(floor, other_floor)
+                        floor_graph.addEdge(i, n)
                     if x_pos_floor == other_floor_x - 1:
-                        floor_graph.addEdge(floor, other_floor)
+                        floor_graph.addEdge(i, n)
             if y_pos_floor != other_floor:
                 if ( y_pos_floor == other_floor_y + 1 or y_pos_floor == other_floor_y - 1 ) and x_pos_floor == other_floor_x:
                     if y_pos_floor == other_floor_y + 1:
-                        floor_graph.addEdge(floor, other_floor)
+                        floor_graph.addEdge(i, n)
                     if y_pos_floor == other_floor_y - 1:
-                        floor_graph.addEdge(floor, other_floor)
+                        floor_graph.addEdge(i, n)
+    print(floor_pos_list)
 
-
-
-floor_graph =  Graph(400)
 
 maze_initiate()
-graph_edge_connection()
+graph_generation()
 
 
 def spawn_player():    
