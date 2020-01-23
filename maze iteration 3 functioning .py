@@ -1,6 +1,6 @@
 import pygame
 import random
- 
+
 # Define some colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -103,13 +103,13 @@ class Enemy(pygame.sprite.Sprite):
 
     def control(self, player_x, player_y):
         if player_x > self.rect.x:
-            self.x_speed = 1
+            self.x_speed = 0
         elif player_x < self.rect.x:
-            self.x_speed = -1
+            self.x_speed = 0
         if player_y > self.rect.y:
-            self.y_speed = 1
+            self.y_speed = 0
         elif player_y < self.rect.y:
-            self.y_speed = -1
+            self.y_speed = 0
 
 ##        self.x_speed += x
 ##        self.y_speed += y
@@ -143,6 +143,11 @@ class Enemy(pygame.sprite.Sprite):
                 self.rect.bottom = block.rect.top
             else:
                 self.rect.top = block.rect.bottom
+
+
+
+
+    
 
 
         
@@ -191,98 +196,7 @@ class Floor(pygame.sprite.Sprite):
 ##        self.adj[s].append(d)
 ##        self.distance[s] = 1000000
 
-class Node():
-    def __init__(self,parent = None, position = None):
-        self.parent = parent
-        self.position = position
 
-        self.g = 0
-        self.h = 0
-        self.f = 0
-
-    def __eq__(self, other):
-        return self.position == other.position
-    def astar(maze, start, end):
-        """Returns a list of tuples as a path from the given start to the given end in the given maze"""
-
-        # Create start and end node
-        start_node = Node(None, start)
-        start_node.g = start_node.h = start_node.f = 0
-        end_node = Node(None, end)
-        end_node.g = end_node.h = end_node.f = 0
-
-        # Initialize both open and closed list
-        open_list = []
-        closed_list = []
-
-    # Add the start node
-        open_list.append(start_node)
-
-    # Loop until you find the end
-        while len(open_list) > 0:
-
-        # Get the current node
-            current_node = open_list[0]
-            current_index = 0
-            for index, item in enumerate(open_list):
-                if item.f < current_node.f:
-                    current_node = item
-                    current_index = index
-
-        # Pop current off open list, add to closed list
-            open_list.pop(current_index)
-            closed_list.append(current_node)
-
-        # Found the goal
-            if current_node == end_node:
-                path = []
-                current = current_node
-                while current is not None:
-                    path.append(current.position)
-                    current = current.parent
-                return path[::-1] # Return reversed path
-
-        # Generate children
-            children = []
-            for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]: # Adjacent squares
-
-            # Get node position
-                node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
-
-            # Make sure within range
-                if node_position[0] > (len(maze) - 1) or node_position[0] < 0 or node_position[1] > (len(maze[len(maze)-1]) -1) or node_position[1] < 0:
-                    continue
-
-            # Make sure walkable terrain
-                if maze[node_position[0]][node_position[1]] != 0:
-                    continue
-
-            # Create new node
-                new_node = Node(current_node, node_position)
-
-            # Append
-                children.append(new_node)
-
-        # Loop through children
-            for child in children:
-
-            # Child is on the closed list
-                for closed_child in closed_list:
-                    if child == closed_child:
-                        continue
-
-            # Create the f, g, and h values
-                child.g = current_node.g + 1
-                child.h = ((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2)
-                child.f = child.g + child.h
-
-            # Child is already in the open list
-                for open_node in open_list:
-                    if child == open_node and child.g > open_node.g:
-                        continue
-
-            # Add the child to the open list
-                open_list.append(child)
 
 
     
@@ -321,26 +235,27 @@ maze_array = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
               [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
               [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
               [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,]]
-maze_floor_array = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+
+maze_floor_array = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
                     
 floor_array = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
               [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,],
@@ -363,7 +278,28 @@ floor_array = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
               [360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379,],
               [380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399,]]
 
+object_array = [['aa', 'ab', 'ac', 'ad', 'ae', 'af', 'ag', 'ah', 'ai', 'aj', 'ak', 'al', 'am', 'an', 'ao', 'ap', 'aq', 'ar', 'as', 'at'],
+                ['ba', 'bb', 'bc', 'bd', 'be', 'bf', 'bg', 'bh', 'bi', 'bj', 'bk', 'bl', 'bm', 'bn', 'bo', 'bp', 'bq', 'br', 'bs', 'bt'],
+                ['ca', 'cb', 'cc', 'cd', 'ce', 'cf', 'cg', 'ch', 'ci', 'cj', 'ck', 'cl', 'cm', 'cn', 'co', 'cp', 'cq', 'cr', 'cs', 'ct'],
+                ['da', 'db', 'dc', 'dd', 'de', 'df', 'dg', 'dh', 'di', 'dj', 'dk', 'dl', 'dm', 'dn', 'do', 'dp', 'dq', 'dr', 'ds', 'dt'],
+                ['ea', 'eb', 'ec', 'ed', 'ee', 'ef', 'eg', 'eh', 'ei', 'ej', 'ek', 'el', 'em', 'en', 'eo', 'ep', 'eq', 'er', 'es', 'et'],
+                ['fa', 'fb', 'fc', 'fd', 'fe', 'ff', 'fg', 'fh', 'fi', 'fj', 'fk', 'fl', 'fm', 'fn', 'fo', 'fp', 'fq', 'fr', 'fs', 'ft'],
+                ['ga', 'gb', 'gc', 'gd', 'ge', 'gf', 'gg', 'gh', 'gi', 'gj', 'gk', 'gl', 'gm', 'gn', 'go', 'gp', 'gq', 'gr', 'gs', 'gt'],
+                ['ha', 'hb', 'hc', 'hd', 'he', 'hf', 'hg', 'hh', 'hi', 'hj', 'hk', 'hl', 'hm', 'hn', 'ho', 'hp', 'hq', 'hr', 'hs', 'ht'],
+                ['ia', 'ib', 'ic', 'id', 'ie', 'if', 'ig', 'ih', 'ii', 'ij', 'ik', 'il', 'im', 'in', 'io', 'ip', 'iq', 'ir', 'is', 'it'],
+                ['ja', 'jb', 'jc', 'jd', 'je', 'jf', 'jg', 'jh', 'ji', 'jj', 'jk', 'jl', 'jm', 'jn', 'jo', 'jp', 'jq', 'jr', 'js', 'jt'],
+                ['ka', 'kb', 'kc', 'kd', 'ke', 'kf', 'kg', 'kh', 'ki', 'kj', 'kk', 'kl', 'km', 'kn', 'ko', 'kp', 'kq', 'kr', 'ks', 'kt'],
+                ['la', 'lb', 'lc', 'ld', 'le', 'lf', 'lg', 'lh', 'li', 'lj', 'lk', 'll', 'lm', 'ln', 'lo', 'lp', 'lq', 'lr', 'ls', 'lt'],
+                ['ma', 'mb', 'mc', 'md', 'me', 'mf', 'mg', 'mh', 'mi', 'mj', 'mk', 'ml', 'mm', 'mn', 'mo', 'mp', 'mq', 'mr', 'ms', 'mt'],
+                ['na', 'nb', 'nc', 'nd', 'ne', 'nf', 'ng', 'nh', 'ni', 'nj', 'nk', 'nl', 'nm', 'nn', 'no', 'np', 'nq', 'nr', 'ns', 'nt'],
+                ['oa', 'ob', 'oc', 'od', 'oe', 'of', 'og', 'oh', 'oi', 'oj', 'ok', 'ol', 'om', 'on', 'oo', 'op', 'oq', 'or', 'os', 'ot'],
+                ['pa', 'pb', 'pc', 'pd', 'pe', 'pf', 'pg', 'ph', 'pi', 'pj', 'pk', 'pl', 'pm', 'pn', 'po', 'pp', 'pq', 'pr', 'ps', 'pt'],
+                ['qa', 'qb', 'qc', 'qd', 'qe', 'qf', 'qg', 'qh', 'qi', 'qj', 'qk', 'ql', 'qm', 'qn', 'qo', 'qp', 'qq', 'qr', 'qs', 'qt'],
+                ['ra', 'rb', 'rc', 'rd', 're', 'rf', 'rg', 'rh', 'ri', 'rj', 'rk', 'rl', 'rm', 'rn', 'ro', 'rp', 'rq', 'rr', 'rs', 'rt'],
+                ['sa', 'sb', 'sc', 'sd', 'se', 'sf', 'sg', 'sh', 'si', 'sj', 'sk', 'sl', 'sm', 'sn', 'so', 'sp', 'sq', 'sr', 'ss', 'st'],
+                ['ta', 'tb', 'tc', 'td', 'te', 'tf', 'tg', 'th', 'ti', 'tj', 'tk', 'tl', 'tm', 'tn', 'to', 'tp', 'tq', 'tr', 'ts', 'tt']]
 
+object_dictionary = {}
 floor_pos_list = []
 
 
@@ -374,7 +310,6 @@ def block_replace(x, y):
     all_sprites_list.remove(maze_array[x][y])
     floor_pos_list.append(floor_array[x][y])
     maze_array[x][y] = Floor(LIGHTGRAY, x * 40, y * 40)
-    maze_floor_array[x][y] = 1
     floor_sprite_list.add(maze_array[x][y])
     all_sprites_list.add(maze_array[x][y])
 
@@ -694,13 +629,53 @@ def maze_initiate():
         if leftside_connect == True and top_connect == True and rightside_connect == True and bottom_connect == True:
             reach_floor = True
        
+def check_floors(x, y):
+
+    array = []
+    if x != 19:
+        if maze_floor_array[x+1][y] == 0:
+            array.append(object_array[x+1][y])
+    if x != 0:        
+        if maze_floor_array[x-1][y] == 0:
+            array.append(object_array[x-1][y])
+    if y != 19:
+        if maze_floor_array[x][y+1] == 0:
+            array.append(object_array[x][y+1])
+    if y != 0:
+        if maze_floor_array[x][y-1] == 0:
+            array.append(object_array[x][y-1])
+            
+    return array
+
+
+def floor_generation():
+
+    
+    for floor in floor_pos_list:
+        
+        y_pos_floor = floor % 20
+        x_pos_floor = floor // 20
+        maze_floor_array[x_pos_floor][y_pos_floor] = 0
+    print(maze_floor_array)
+    for k in range(20):
+        for l in range(20):
+            if maze_floor_array[k][l] == 0:
+                object_dictionary[object_array[k][l]] = check_floors(k, l)
+
+    print(object_dictionary)
+
+    
+        
+
+                        
+
 
 
 
 
 
 maze_initiate()
-
+floor_generation()
 
 
 def spawn_player():    
@@ -715,7 +690,130 @@ def spawn_enemy():
 
 
     
- 
+
+##def connect_nodes():
+##
+##    for i in range(19):
+##        for j in range(19):
+##            if maze_floor_array[i][j] == 0:
+##                object_array[i][j] = Node()
+##                node = object_array[i][j]
+##                if i == 0:
+##                    if maze_floor_array[i+1][j] == 0:
+##                        node.add_connection(object_array[i+1][j])
+##
+##                    if maze_floor_array[i][j-1] == 0:
+##                        node.add_connection(object_array[i][j-1])
+##
+##                    if maze_floor_array[i][j+1] == 0:
+##                        node.add_connection(object_array[i][j+1])
+##
+##                elif i == 19:
+##                    if maze_floor_array[i-1][j] == 0:
+##                        node.add_connection(object_array[i-1][j])
+##
+##                    if maze_floor_array[i][j-1] == 0:
+##                        node.add_connection(object_array[i][j-1])
+##
+##                    if maze_floor_array[i][j+1] == 0:
+##                        node.add_connection(object_array[i][j+1])
+##
+##                if j == 0:
+##                    if maze_floor_array[i+1][j] == 0:
+##                        node.add_connection(object_array[i+1][j])
+##
+##                    if maze_floor_array[i-1][j] == 0:
+##                        node.add_connection(object_array[i-1][j])
+##
+##                    if maze_floor_array[i][j+1] == 0:
+##                        node.add_connection(object_array[i][j+1])
+##
+##                elif j == 19:
+##                    if maze_floor_array[i+1][j] == 0:
+##                        node.add_connection(object_array[i+1][j])
+##
+##                    if maze_floor_array[i-1][j] == 0:
+##                        node.add_connection(object_array[i-1][j])
+##
+##                    if maze_floor_array[i][j-1] == 0:
+##                        node.add_connection(object_array[i][j-1])
+##
+##                if (i != 0 and i != 19) and (j != 0 and j != 19):
+##                    if maze_floor_array[i-1][j] == 0:
+##                        node.add_connection(object_array[i-1][j])
+##
+##                    if maze_floor_array[i+1][j] == 0:
+##                        node.add_connection(object_array[i+1][j])
+##
+##                    if maze_floor_array[i][j-1] == 0:
+##                        node.add_connection(object_array[i][j-1])
+##
+##                    if maze_floor_array[i][j+1] == 0:
+##                        node.add_connection(object_array[i][j+1])
+##
+        
+def breadth_first_search(enemy, player):
+
+    queue = [[enemy]]
+    explored = []
+
+    if enemy == player:
+        return "no path"
+
+    while queue:
+        path = queue.pop(0)
+        node = path[-1]
+        
+        if node not in explored:
+
+            #print(object_dictionary[node])
+            neighbours = object_dictionary[node]
+
+
+            for i in neighbours:
+                new_path = list(path)
+                new_path.append(i)
+                queue.append(new_path)
+
+                if i == player:
+                    
+                    return new_path
+                
+            explored.append(path)
+
+            
+player_coords = spawn_player()
+enemy_coords = spawn_enemy()
+    
+
+##def new_block (player_pos, enemy_pos, original_player_pos, original_enemy_pos):
+##    
+##
+##    current_player_pos = original_player_pos
+##    current_enemy_pos = original_enemy_pos
+##    
+##    new_player_pos = player_pos
+##    
+##    new_enemy_pos = enemy_pos
+##
+##    if current_player_pos != new_player_pos:
+##        return True
+##        current_player_pos = new_player_pos
+##        return current_player_pos
+##    
+##    if current_enemy_pos != new_enemy_pos:
+##        return True
+##        
+##        current_enemy_pos = new_enemy_pos
+##        return current_enemy_pos
+##
+##new_block(player_coords, enemy_coords, player_coords, enemy_coords)        
+
+    
+        
+
+
+
 
 
 def ai_movement():
@@ -730,25 +828,28 @@ def ai_movement():
         
         enemy_pos = enemy.rect.x + (enemy.rect.y * 800)
         enemy.control(player.rect.x, player.rect.y)
-        
-        #dijsktra_algorithm(floor_graph, floor_array[player_floor_x_pos][player_floor_y_pos], floor_array[enemy_floor_x_pos][enemy_floor_y_pos])
+
+
+        print(breadth_first_search(object_array[enemy_floor_x_pos][enemy_floor_y_pos], object_array[player_floor_x_pos][player_floor_y_pos]))
+
+
 
         
-        
 
-player = Player(BLUE,(spawn_player() // 20) * 40, (spawn_player() % 20) * 40)
-enemy = Enemy(((spawn_enemy() // 20) * 40), ((spawn_enemy() % 20) * 40) )
-all_sprites_list.add(enemy)
-all_sprites_list.add(player)
 
-player.blocks = block_sprite_list
-player.floors = floor_sprite_list
-enemy.blocks = block_sprite_list
-enemy.floors = floor_sprite_list
- 
+player_spawn = False
+
+enemy_spawn = False
+
+
+time_interval = 0
+
+
+
 # -------- Main Program Loop -----------
 while not done:
     # --- Main event loop
+    time_interval += 1
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
@@ -782,14 +883,44 @@ while not done:
 
 
     # --- Game logic should go here
-    ai_movement()
+    
     
 
     
 
 
-    
-    
+    if player_spawn == False:
+
+        
+        print(floor_pos_list)
+        print(player_coords)
+        print(player_coords// 20)
+        print(player_coords % 20)
+        player = Player(BLUE,(player_coords // 20) * 40, (player_coords % 20) * 40)
+        player_spawn = True
+        all_sprites_list.add(player)
+        player.blocks = block_sprite_list
+        player.floors = floor_sprite_list
+
+
+    if enemy_spawn == False:
+        
+        print(floor_pos_list)
+        print(enemy_coords)
+        print(enemy_coords // 20)
+        print(enemy_coords % 20)
+
+        enemy = Enemy(((enemy_coords // 20) * 40), ((enemy_coords % 20) * 40) )
+        
+        enemy_spawn = True
+        all_sprites_list.add(enemy)
+        enemy.blocks = block_sprite_list
+        enemy.floors = floor_sprite_list
+    if time_interval  == 60:
+        ai_movement()
+        time_interval = 0
+        
+         
     all_sprites_list.update()
     # --- Screen-clearing code goes here
  

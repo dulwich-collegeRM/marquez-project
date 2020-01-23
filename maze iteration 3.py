@@ -103,13 +103,13 @@ class Enemy(pygame.sprite.Sprite):
 
     def control(self, player_x, player_y):
         if player_x > self.rect.x:
-            self.x_speed = 1
+            self.x_speed = 0
         elif player_x < self.rect.x:
-            self.x_speed = -1
+            self.x_speed = 0
         if player_y > self.rect.y:
-            self.y_speed = 1
+            self.y_speed = 0
         elif player_y < self.rect.y:
-            self.y_speed = -1
+            self.y_speed = 0
 
 ##        self.x_speed += x
 ##        self.y_speed += y
@@ -191,98 +191,103 @@ class Floor(pygame.sprite.Sprite):
 ##        self.adj[s].append(d)
 ##        self.distance[s] = 1000000
 
-class Node():
-    def __init__(self,parent = None, position = None):
-        self.parent = parent
-        self.position = position
-
-        self.g = 0
-        self.h = 0
-        self.f = 0
-
-    def __eq__(self, other):
-        return self.position == other.position
-    def astar(maze, start, end):
-        """Returns a list of tuples as a path from the given start to the given end in the given maze"""
-
-        # Create start and end node
-        start_node = Node(None, start)
-        start_node.g = start_node.h = start_node.f = 0
-        end_node = Node(None, end)
-        end_node.g = end_node.h = end_node.f = 0
-
-        # Initialize both open and closed list
-        open_list = []
-        closed_list = []
-
-    # Add the start node
-        open_list.append(start_node)
-
-    # Loop until you find the end
-        while len(open_list) > 0:
-
-        # Get the current node
-            current_node = open_list[0]
-            current_index = 0
-            for index, item in enumerate(open_list):
-                if item.f < current_node.f:
-                    current_node = item
-                    current_index = index
-
-        # Pop current off open list, add to closed list
-            open_list.pop(current_index)
-            closed_list.append(current_node)
-
-        # Found the goal
-            if current_node == end_node:
-                path = []
-                current = current_node
-                while current is not None:
-                    path.append(current.position)
-                    current = current.parent
-                return path[::-1] # Return reversed path
-
-        # Generate children
-            children = []
-            for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]: # Adjacent squares
-
-            # Get node position
-                node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
-
-            # Make sure within range
-                if node_position[0] > (len(maze) - 1) or node_position[0] < 0 or node_position[1] > (len(maze[len(maze)-1]) -1) or node_position[1] < 0:
-                    continue
-
-            # Make sure walkable terrain
-                if maze[node_position[0]][node_position[1]] != 0:
-                    continue
-
-            # Create new node
-                new_node = Node(current_node, node_position)
-
-            # Append
-                children.append(new_node)
-
-        # Loop through children
-            for child in children:
-
-            # Child is on the closed list
-                for closed_child in closed_list:
-                    if child == closed_child:
-                        continue
-
-            # Create the f, g, and h values
-                child.g = current_node.g + 1
-                child.h = ((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2)
-                child.f = child.g + child.h
-
-            # Child is already in the open list
-                for open_node in open_list:
-                    if child == open_node and child.g > open_node.g:
-                        continue
-
-            # Add the child to the open list
-                open_list.append(child)
+##class Node():
+##    def __init__(self,parent = None, position = None):
+##        self.parent = parent
+##        self.position = position
+##
+##        self.g = 0
+##        self.h = 0
+##        self.f = 0
+##
+##    def __eq__(self, other):
+##        return self.position == other.position
+##    def astar(maze, start, end):
+##        
+##                # Create start and end node
+##        start_node = Node(None, start)
+##        start_node.g = 0
+##        start_node.h = 0
+##        start_node.f = 0
+##        end_node = Node(None, end)
+##        end_node.g = 0
+##        end_node.h = 0
+##        end_node.f = 0
+##
+##        # Initialize both open and closed list
+##        open_list = []
+##        closed_list = []
+##        path_list = []
+##
+##    # Add the start node
+##        open_list.append(start_node)
+##
+##    # Loop until you find the end
+##        while len(open_list) > 0:
+##
+##        # Get the current node
+##            current_node = open_list[0]
+##            current_index = 0
+##            for index, item in enumerate(open_list):
+##                if item.f < current_node.f:
+##                    current_node = item
+##                    current_index = index
+##            
+##        # Pop current off open list, add to closed list
+##            open_list.pop(current_index)
+##            path_list.append(current_index)
+##            closed_list.append(current_node)
+##
+##        # Found the goal
+##            if current_node == end_node:
+##                path = []
+##                current = current_node
+##                while current is not None:
+##                    path.append(current.position)
+##                    current = current.parent
+##                return path[::-1] # Return reversed path
+##
+##        # Generate children
+##            children = []
+##            for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0)]: # Adjacent squares
+##
+##            # Get node position
+##                node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
+##
+##            # Make sure within range
+##                if node_position[0] > (len(maze) - 1) or node_position[0] < 0 or node_position[1] > (len(maze[len(maze)-1]) -1) or node_position[1] < 0:
+##                    continue
+##
+##            # Make sure walkable terrain
+##                if maze[node_position[0]][node_position[1]] != 0:
+##                    continue
+##
+##            # Create new node
+##                new_node = Node(current_node, node_position)
+##
+##            # Append
+##                children.append(new_node)
+##
+##        # Loop through children
+##            for child in children:
+##
+##            # Child is on the closed list
+##                for closed_child in closed_list:
+##                    if child == closed_child:
+##                        continue
+##
+##            # Create the f, g, and h values
+##                child.g = current_node.g + 1
+##                child.h = ((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2)
+##                child.f = child.g + child.h
+##
+##            # Child is already in the open list
+##                for open_node in open_list:
+##                    if child == open_node and child.g > open_node.g:
+##                        continue
+##
+##            # Add the child to the open list
+##                open_list.append(child)
 
 
     
@@ -321,26 +326,26 @@ maze_array = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
               [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
               [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
               [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,]]
-maze_floor_array = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+maze_floor_array = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
                     
 floor_array = [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,],
               [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,],
@@ -374,7 +379,6 @@ def block_replace(x, y):
     all_sprites_list.remove(maze_array[x][y])
     floor_pos_list.append(floor_array[x][y])
     maze_array[x][y] = Floor(LIGHTGRAY, x * 40, y * 40)
-    maze_floor_array[x][y] = 1
     floor_sprite_list.add(maze_array[x][y])
     all_sprites_list.add(maze_array[x][y])
 
@@ -697,10 +701,20 @@ def maze_initiate():
 
 
 
+def floor_generation():
+
+    
+    for i in range(len(floor_pos_list)-1) :
+        floor = floor_pos_list[i]
+        y_pos_floor = floor // 20
+        x_pos_floor = floor % 20
+        maze_floor_array[x_pos_floor][y_pos_floor] = 0
+
+
 
 
 maze_initiate()
-
+floor_generation()
 
 
 def spawn_player():    
@@ -715,7 +729,13 @@ def spawn_enemy():
 
 
     
- 
+
+
+    
+        
+
+
+
 
 
 def ai_movement():
@@ -730,8 +750,12 @@ def ai_movement():
         
         enemy_pos = enemy.rect.x + (enemy.rect.y * 800)
         enemy.control(player.rect.x, player.rect.y)
-        
-        #dijsktra_algorithm(floor_graph, floor_array[player_floor_x_pos][player_floor_y_pos], floor_array[enemy_floor_x_pos][enemy_floor_y_pos])
+
+        enemy_node = (enemy_floor_x_pos, enemy_floor_y_pos)
+        player_node = (player_floor_x_pos, player_floor_y_pos)
+
+        #path = Node.astar(maze_floor_array, enemy_node, player_node)
+        #print(path)
 
         
         
@@ -745,6 +769,7 @@ player.blocks = block_sprite_list
 player.floors = floor_sprite_list
 enemy.blocks = block_sprite_list
 enemy.floors = floor_sprite_list
+
  
 # -------- Main Program Loop -----------
 while not done:
