@@ -85,12 +85,15 @@ class Enemy(pygame.sprite.Sprite):
     x_speed = 0
     y_speed = 0
     
+    #This is the initialisation function of the player class
     def __init__(self, x, y):
         super().__init__()
         self.image = pygame.Surface([20,20])
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
-
+        #this initialises the sprite attributes
+        
+        #This initialises the player as a square sprite
         pygame.draw.rect(self.image, RED, [0, 0, 20, 20])
 
         self.rect = self.image.get_rect()
@@ -98,10 +101,11 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.y = y
         self.blocks = None
         self.floors = None
-
-
+        #this initialises the attributes of the square
 
     def control(self, player_x, player_y):
+
+        
         if player_x > self.rect.x:
             self.x_speed = 1
         elif player_x < self.rect.x:
@@ -111,16 +115,6 @@ class Enemy(pygame.sprite.Sprite):
         elif player_y < self.rect.y:
             self.y_speed = -1
 
-##        self.x_speed += x
-##        self.y_speed += y
-
-
-        
-
-        
-
-        
-        
 
 
     def update(self):

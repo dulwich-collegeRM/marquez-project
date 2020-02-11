@@ -84,6 +84,9 @@ class Enemy(pygame.sprite.Sprite):
 
     x_speed = 0
     y_speed = 0
+    floor_pos = None
+    x_pos = None
+    y_pos = None
     
     def __init__(self, x, y):
         super().__init__()
@@ -101,18 +104,36 @@ class Enemy(pygame.sprite.Sprite):
 
 
 
-    def control(self, player_x, player_y):
-        if player_x > self.rect.x:
-            self.x_speed = 0
-        elif player_x < self.rect.x:
-            self.x_speed = 0
-        if player_y > self.rect.y:
-            self.y_speed = 0
-        elif player_y < self.rect.y:
-            self.y_speed = 0
+    def control(self, array):
+        #print("jeff")
 
-##        self.x_speed += x
-##        self.y_speed += y
+        self.floor_pos = (self.rect.x // 40) + (20 * (self.rect.y // 40))
+        self.x_pos = self.floor_pos // 20
+        self.y_pos = self.floor_pos % 20
+        
+
+        if array[1] == object_array[self.x_pos + 1][self.y_pos]:
+            self.x_speed = 1
+
+        if array[1] == object_array[self.x_pos - 1][self.y_pos]:
+            self.x_speed = -1
+
+        if array[1] == object_array[self.x_pos][self.y_pos + 1]:
+            self.y_speed = 1
+
+        if array[1] == object_array[self.x_pos][self.y_pos - 1]:
+            self.y_speed = -1
+                                                
+##        if player_x > self.rect.x:
+##            self.x_speed = 0
+##        elif player_x < self.rect.x:
+##            self.x_speed = 0
+##        if player_y > self.rect.y:
+##            self.y_speed = 0
+##        elif player_y < self.rect.y:
+##            self.y_speed = 0
+
+
 
 
         
@@ -656,14 +677,16 @@ def floor_generation():
         y_pos_floor = floor % 20
         x_pos_floor = floor // 20
         maze_floor_array[x_pos_floor][y_pos_floor] = 0
-    print(maze_floor_array)
+
     for k in range(20):
         for l in range(20):
             if maze_floor_array[k][l] == 0:
                 object_dictionary[object_array[k][l]] = check_floors(k, l)
 
-    print(object_dictionary)
+#def display_menu():
 
+#    pygame.draw.rect(screen,BLACK,[300,300,200,100],0)
+    
     
         
 
@@ -691,66 +714,7 @@ def spawn_enemy():
 
     
 
-##def connect_nodes():
-##
-##    for i in range(19):
-##        for j in range(19):
-##            if maze_floor_array[i][j] == 0:
-##                object_array[i][j] = Node()
-##                node = object_array[i][j]
-##                if i == 0:
-##                    if maze_floor_array[i+1][j] == 0:
-##                        node.add_connection(object_array[i+1][j])
-##
-##                    if maze_floor_array[i][j-1] == 0:
-##                        node.add_connection(object_array[i][j-1])
-##
-##                    if maze_floor_array[i][j+1] == 0:
-##                        node.add_connection(object_array[i][j+1])
-##
-##                elif i == 19:
-##                    if maze_floor_array[i-1][j] == 0:
-##                        node.add_connection(object_array[i-1][j])
-##
-##                    if maze_floor_array[i][j-1] == 0:
-##                        node.add_connection(object_array[i][j-1])
-##
-##                    if maze_floor_array[i][j+1] == 0:
-##                        node.add_connection(object_array[i][j+1])
-##
-##                if j == 0:
-##                    if maze_floor_array[i+1][j] == 0:
-##                        node.add_connection(object_array[i+1][j])
-##
-##                    if maze_floor_array[i-1][j] == 0:
-##                        node.add_connection(object_array[i-1][j])
-##
-##                    if maze_floor_array[i][j+1] == 0:
-##                        node.add_connection(object_array[i][j+1])
-##
-##                elif j == 19:
-##                    if maze_floor_array[i+1][j] == 0:
-##                        node.add_connection(object_array[i+1][j])
-##
-##                    if maze_floor_array[i-1][j] == 0:
-##                        node.add_connection(object_array[i-1][j])
-##
-##                    if maze_floor_array[i][j-1] == 0:
-##                        node.add_connection(object_array[i][j-1])
-##
-##                if (i != 0 and i != 19) and (j != 0 and j != 19):
-##                    if maze_floor_array[i-1][j] == 0:
-##                        node.add_connection(object_array[i-1][j])
-##
-##                    if maze_floor_array[i+1][j] == 0:
-##                        node.add_connection(object_array[i+1][j])
-##
-##                    if maze_floor_array[i][j-1] == 0:
-##                        node.add_connection(object_array[i][j-1])
-##
-##                    if maze_floor_array[i][j+1] == 0:
-##                        node.add_connection(object_array[i][j+1])
-##
+
         
 def breadth_first_search(enemy, player):
 
@@ -827,10 +791,11 @@ def ai_movement():
         enemy_floor_y_pos = enemy.rect.y // 40
         
         enemy_pos = enemy.rect.x + (enemy.rect.y * 800)
-        enemy.control(player.rect.x, player.rect.y)
+        
 
 
         print(breadth_first_search(object_array[enemy_floor_x_pos][enemy_floor_y_pos], object_array[player_floor_x_pos][player_floor_y_pos]))
+
 
 
 
@@ -842,14 +807,15 @@ player_spawn = False
 enemy_spawn = False
 
 
-time_interval = 0
+#time_interval = 0
 
 
 
 # -------- Main Program Loop -----------
 while not done:
     # --- Main event loop
-    time_interval += 1
+#    if game_start = True:
+#    time_interval += 1
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
@@ -892,10 +858,7 @@ while not done:
     if player_spawn == False:
 
         
-        print(floor_pos_list)
-        print(player_coords)
-        print(player_coords// 20)
-        print(player_coords % 20)
+
         player = Player(BLUE,(player_coords // 20) * 40, (player_coords % 20) * 40)
         player_spawn = True
         all_sprites_list.add(player)
@@ -905,10 +868,6 @@ while not done:
 
     if enemy_spawn == False:
         
-        print(floor_pos_list)
-        print(enemy_coords)
-        print(enemy_coords // 20)
-        print(enemy_coords % 20)
 
         enemy = Enemy(((enemy_coords // 20) * 40), ((enemy_coords % 20) * 40) )
         
@@ -916,12 +875,15 @@ while not done:
         all_sprites_list.add(enemy)
         enemy.blocks = block_sprite_list
         enemy.floors = floor_sprite_list
-    if time_interval  == 60:
+#    if time_interval  == 60:
         ai_movement()
-        time_interval = 0
+#        time_interval = 0
         
          
     all_sprites_list.update()
+
+#    else:
+ #       display_menu()
     # --- Screen-clearing code goes here
  
     # Here, we clear the screen to white. Don't put other drawing commands
@@ -929,7 +891,7 @@ while not done:
  
     # If you want a background image, replace this clear with blit'ing the
     # background image.
-    screen.fill(WHITE)
+    screen.fill(BLACK)
     #print(player.x_speed, player.y_speed)
     
     # --- Drawing code should go here

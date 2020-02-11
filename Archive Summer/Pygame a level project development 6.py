@@ -23,6 +23,7 @@ clock = pygame.time.Clock()
 
 class Player(pygame.sprite.Sprite):
 
+    #initialisation function of the player class
     def __init__(self, color, width, height):
         super().__init__()
         self.image = pygame.Surface([width, height])
@@ -30,36 +31,27 @@ class Player(pygame.sprite.Sprite):
         self.image.set_colorkey(WHITE)
         self.x_speed = 0
         self.y_speed = 0
-        
+        #sets the players parameters and creates the players sprite as a square
         pygame.draw.rect(self.image, color, [0, 0, width, height])
 
         self.rect = self.image.get_rect()
         #self.rect.topleft = pos
-
+        
+    #define the players movement
     def control(self,x,y):
         self.x_speed = x
         self.y_speed = y
 
-##    def move_r(self, x_speed):
-##        self.rect.x += x_speed
-##        
-##    def move_l(self, x_speed):
-##        self.rect.x -= x_speed
-##        
-##    def move_u(self, y_speed):
-##        self.rect.y -= y_speed
-##        
-##    def move_d(self, y_speed):
-##        self.rect.y += y_speed
-
+    #updates the players position to a new one
     def update(self):
         self.rect.x += self.x_speed 
         self.rect.y += self.y_speed
         
-        
+    #stops the player if it collides with a boundary
     def collide(self, all_sprites_list):
         if pygame.sprite.spritecollide(self, all_sprites_list, False):
             x_speed = 0
+            y_speed = 0
             
 
 class Block(pygame.sprite.Sprite):
@@ -94,18 +86,28 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-
+        #In the event that a key gets pressed down
         if event.type == pygame.KEYDOWN:
+
+            #If either the 'a' key or the left arrow key is pressed move left
             if event.key == pygame.K_LEFT or event.key == ord('a'):
                 player.control(-4,0)
+
+            #If either the 'd' key or the right arrow key is pressed move right
             if event.key == pygame.K_RIGHT or event.key == ord('d'):
                 player.control(4,0)
+                
+            #If either the 'w' key or the up arrow key is pressed move up
             if event.key == pygame.K_UP or event.key == ord('w'):
                 player.control(0,-4)
+                
+            #If either the 's' key or the down arrow key is pressed move down
             if event.key == pygame.K_DOWN or event.key == ord('s'):
                 player.control(0,4)
 
+        #In the event that a key is released
         if event.type == pygame.KEYUP:
+            #if the key is released stop moving
             if event.key == pygame.K_LEFT or event.key == ord('a'):
                 player.control(0,0)
             if event.key == pygame.K_RIGHT or event.key == ord('d'):
@@ -120,15 +122,7 @@ while not done:
 
     # --- Game logic should go here
     
-##    key_pr = pygame.key.get_pressed()
-##    if key_pr[pygame.K_LEFT]:
-##        Player1.control(-4,0)
-##    if key_pr[pygame.K_RIGHT]:
-##        Player1.control(4,0)
-##    if key_pr[pygame.K_UP]:
-##        Player1.control(0,-4)
-##    if key_pr[pygame.K_DOWN]:
-##        Player1.control(0,4)
+
     
 
     all_sprites_list.remove(player)

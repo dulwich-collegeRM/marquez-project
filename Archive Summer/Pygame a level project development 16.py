@@ -660,14 +660,14 @@ def maze_initiate():
     while not reach_floor:
         if top_connect == False:
             next_block_top = [0, 1, 2, 3]
-                if top_x == 0:
-                    next_block_top.remove(0)
-                if top_x == 19:
-                    next_block_top.remove(2)
-                if top_y == 0:
-                    next_block_top.remove(1)
-                if top_y == 19:
-                    next_block_top.remove(3)
+            if top_x == 0:
+                next_block_top.remove(0)
+            if top_x == 19:
+                next_block_top.remove(2)
+            if top_y == 0:
+                next_block_top.remove(1)
+            if top_y == 19:
+                next_block_top.remove(3)
             random_top = random.randomchoice(next_block_top)
 ##            if random_top == 0:
 ##                top_y -= 1

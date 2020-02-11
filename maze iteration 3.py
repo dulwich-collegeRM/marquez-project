@@ -24,14 +24,17 @@ done = False
 clock = pygame.time.Clock()
 
 class Player(pygame.sprite.Sprite):
-    
+
+    #This sets the players directional velocity
     x_speed = 0
     y_speed = 0
 
 #sets the movement and life attributes of the player
 
+    #initialisation function which initialises the player as a sprite with certain parameters
     def __init__(self, color, x, y):
         super().__init__()
+        
         self.image = pygame.Surface([20, 20])
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
@@ -39,60 +42,77 @@ class Player(pygame.sprite.Sprite):
         
         pygame.draw.rect(self.image, color, [0, 0, 20, 20])
 
-
+        #sets the playes appearing immage as well as sets the spawning coordinates of the player
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+        #used to hold the walls that the player is colliding with
         self.blocks = None
 
 #initiates the player sprite and its boundaries
 
     def control(self, x, y):
 
+        #Defines the players directional velocity when called
         self.x_speed += x
         self.y_speed += y
-#This is how the user controls the player sprite using inputs
+
             
 
 
 
-
+    #This function updates the position of the sprite and functions as a collision
     def update(self):
 
         self.rect.x += self.x_speed
-        
+
+        #Moves the player to a new position
         block_hit_list = pygame.sprite.spritecollide(self, self.blocks, False)
+        
+        #checks if the new position causes the player to collide with a block
         for block in block_hit_list:
             if self.x_speed > 0:
                 self.rect.right = block.rect.left
             else:
                 self.rect.left = block.rect.right
+        #if a collision takes place the player remains at its previous position
 
                 
         self.rect.y += self.y_speed
+        #Moves the player to a new position
         
         block_hit_list = pygame.sprite.spritecollide(self, self.blocks, False)
+        #checks if the new position causes the player to collide with a block
+        
         for block in block_hit_list:
             if self.y_speed > 0:
                 self.rect.bottom = block.rect.top
             else:
                 self.rect.top = block.rect.bottom
+        #if a collision takes place the player remains at its previous position
 
         floor_standing_list =  pygame.sprite.spritecollide(self, self.floors, False)
 
 class Enemy(pygame.sprite.Sprite):
 
+    #initiates the enemy's movement speed
+
     x_speed = 0
     y_speed = 0
-    
+
+    #function which initiates the class
     def __init__(self, x, y):
         super().__init__()
+
+        #initiates the enemy as a sprite and defines its appearance
         self.image = pygame.Surface([20,20])
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
 
         pygame.draw.rect(self.image, RED, [0, 0, 20, 20])
 
+        #sets the enemy's boundaries as well as its spawning position
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -100,17 +120,24 @@ class Enemy(pygame.sprite.Sprite):
         self.floors = None
 
 
-
+    #this is the control functiom which controls the movement of the player
     def control(self, player_x, player_y):
-        if player_x > self.rect.x:
-            self.x_speed = 0
-        elif player_x < self.rect.x:
-            self.x_speed = 0
-        if player_y > self.rect.y:
-            self.y_speed = 0
-        elif player_y < self.rect.y:
-            self.y_speed = 0
 
+        #checks the players position and oves towards it
+        if player_x > self.rect.x:
+            self.x_speed = 2
+            # if the player is to the right of the enemy move right
+        elif player_x < self.rect.x:
+            self.x_speed = -2
+            #if the player is to the left of the enemy move left
+        if player_y > self.rect.y:
+            self.y_speed = 2
+            #if the player is underneath the enemy move down
+        elif player_y < self.rect.y:
+            self.y_speed = -2
+            #if the player is above the enemy move up
+        if player_y == self.rect.y and player_x == self.rect.x:
+            print("Game over")
 ##        self.x_speed += x
 ##        self.y_speed += y
 
@@ -126,8 +153,11 @@ class Enemy(pygame.sprite.Sprite):
     def update(self):
 
         self.rect.x += self.x_speed
+        #moves the enemy to a new position
         
         block_hit_list = pygame.sprite.spritecollide(self, self.blocks, False)
+
+        #checks if the enemy has collided with any walls
         for block in block_hit_list:
             if self.x_speed > 0:
                 self.rect.right = block.rect.left
@@ -143,6 +173,8 @@ class Enemy(pygame.sprite.Sprite):
                 self.rect.bottom = block.rect.top
             else:
                 self.rect.top = block.rect.bottom
+
+
 
 
         

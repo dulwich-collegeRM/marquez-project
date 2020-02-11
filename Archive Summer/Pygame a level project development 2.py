@@ -21,25 +21,32 @@ done = False
 clock = pygame.time.Clock()
 
 class Player(pygame.sprite.Sprite):
+    
+    #initialisation function for the player class
     def __init__(self, color, width, height):
         super().__init__()
         self.image = pygame.Surface([width, height])
         self.image.fill(WHITE)
         self.image.set_colorkey(WHITE)
 
+        #this sets the players sprite as a square
+
         pygame.draw.rect(self.image, color, [0, 0, width, height])
 
         self.rect = self.image.get_rect()
-
+    #this is called to move the player right
     def move_r(self, x_speed):
         self.rect.x += x_speed
-        
+
+    #This is called to move the player left
     def move_l(self, x_speed):
         self.rect.x -= x_speed
-        
+
+    #This function is called to move the player up
     def move_u(self, y_speed):
         self.rect.y -= y_speed
-        
+
+    #This function is called to move the player down
     def move_d(self, y_speed):
         self.rect.y += y_speed
 
@@ -62,13 +69,23 @@ while not done:
 
 
     # --- Game logic should go here
+
+    #In the event that a key gets pressed
     key_pr = pygame.key.get_pressed()
+
+    #If the left arrow key is pressed move left
     if key_pr[pygame.K_LEFT]:
         Player.move_l(3)
+
+    #if the right arrow key is pressed move right
     if key_pr[pygame.K_RIGHT]:
         Player.move_r(3)
+
+    #If the up arrow key is pressed move up
     if key_pr[pygame.K_UP]:
         Player.move_u(3)
+
+    #If the down arrow key is pressed move down
     if key_pr[pygame.K_DOWN]:
         Player.move_d(3)
     

@@ -601,35 +601,39 @@ maze_graph = { maze_array[0][0]: [maze_array[1][0], maze_array[0][1]],
 ##        all_sprites_list.add(maze_array[x][y])
 
 def maze_generate():
-
+    
+    #this loops through all the positions in the map and fills them with a block
     for x in range(20):
         for y in range(20):
             maze_array[x][y] = Block(BLACK, x * 40, y * 40)
             block_sprite_list.add(maze_array[x][y])
             all_sprites_list.add(maze_array[x][y])
-            #block_array.append(maze_array[x][y])
+            
 
     for e in range(3):
+        
         for i in range(2):
+            #for each of the four sides generate a starting block
                 x_column = i * 19
                 rand1 = random.randint(0,19)
                 block_sprite_list.remove(maze_array[x_column][rand1])
-                #block_array.remove(maze_array[x_column][rand1])
+                #replace the atarting block with a floor object and start the path from it
                 all_sprites_list.remove(maze_array[x_column][rand1])
                 maze_array[x_column][rand1] = Floor(LIGHTGRAY, x_column * 40, rand1 * 40)
                 floor_sprite_list.add(maze_array[x_column][rand1])
                 all_sprites_list.add(maze_array[x_column][rand1])
                 floor_array.append(maze_array[x_column][rand1])
 
-                #x_pos_maze = x_column * 40
-                #y_pos_maze = rand1 * 40
+
                 current_block = maze_array[x_column][rand1]
                 previousblock = 5
             
                 for count in range(12):
+                    #repeat the next process ttwelve times
                 
-                    #current_block = maze_array[x_column][rand1]
+
                     nextblock = [0, 1, 2, 3]
+                    #array holding all four possible directions of a path
                     if x_column == 0 or previousblock == 2 :
                         nextblock.remove(0)
                     if x_column == 19 or previousblock == 0:
@@ -638,40 +642,46 @@ def maze_generate():
                         nextblock.remove(1)
                     if rand1 == 19 or previousblock == 1:
                         nextblock.remove(3)
-    
+                    #remove all possible scenarios where a path would go off the screen
                     random1 = random.choice(nextblock)
+                    #random choose the next block
 
                     if random1 == 0:
+                        #if the block chosen was to the left
                         x_column = x_column - 1
                         block_sprite_list.remove(maze_array[x_column][rand1])
-                        #block_array.remove(maze_array[x_column][rand1])
+                        #replace the block currently to the left of the path and place a floor
                         all_sprites_list.remove(maze_array[x_column][rand1])
                         maze_array[x_column][rand1] = Floor(LIGHTGRAY, x_column * 40, rand1 * 40)
                         floor_sprite_list.add(maze_array[x_column][rand1])
                         all_sprites_list.add(maze_array[x_column][rand1])
                         floor_array.append(maze_array[x_column][rand1])
+                        
                     elif random1 == 1:
+                        #if the block chosen was above
                         rand1 = rand1 - 1
                         block_sprite_list.remove(maze_array[x_column][rand1])
-                        #block_array.remove(maze_array[x_column][rand1])
+                        #replace the block currently above the path and place a floor
                         all_sprites_list.remove(maze_array[x_column][rand1])
                         maze_array[x_column][rand1] = Floor(LIGHTGRAY, x_column * 40, rand1 * 40)
                         floor_sprite_list.add(maze_array[x_column][rand1])
                         all_sprites_list.add(maze_array[x_column][rand1])
                         floor_array.append(maze_array[x_column][rand1])
                     elif random1 == 2:
+                        #if the path chosen was to the right
                         x_column += 1
                         block_sprite_list.remove(maze_array[x_column][rand1])
-                        #block_array.remove(maze_array[x_column][rand1])
+                        #replace the block currently to the right of the path and place a floor
                         all_sprites_list.remove(maze_array[x_column][rand1])
                         maze_array[x_column][rand1] = Floor(LIGHTGRAY, x_column * 40, rand1 * 40)
                         floor_sprite_list.add(maze_array[x_column][rand1])
                         all_sprites_list.add(maze_array[x_column][rand1])
                         floor_array.append(maze_array[x_column][rand1])
                     elif random1 == 3:
+                        #if the path chosen was below
                         rand1 += 1
                         block_sprite_list.remove(maze_array[x_column][rand1])
-                        #block_array.remove(maze_array[x_column][rand1])
+                        #replace the block currently below with a floor
                         all_sprites_list.remove(maze_array[x_column][rand1])
                         maze_array[x_column][rand1] = Floor(LIGHTGRAY, x_column * 40, rand1 * 40)
                         floor_sprite_list.add(maze_array[x_column][rand1])
@@ -687,22 +697,23 @@ def maze_generate():
                 y_row = counter * 19
                 rand2 = random.randint(0,19)
                 block_sprite_list.remove(maze_array[rand2][y_row])
-                #block_array.remove(maze_array[x_column][rand1])
+                #choose a random starting block on either side during the two iterations of the loop
                 all_sprites_list.remove(maze_array[rand2][y_row])
                 maze_array[rand2][y_row] = Floor(LIGHTGRAY, rand2 * 40, y_row * 40)
                 floor_sprite_list.add(maze_array[rand2][y_row])
                 all_sprites_list.add(maze_array[rand2][y_row])
                 floor_array.append(maze_array[rand2][y_row])
+                #replace the block at that position with a floor
 
-                #x_pos_maze = x_column * 40
-                #y_pos_maze = rand1 * 40
+                
                 current_block = maze_array[rand2][y_row]
                 previous_block = 5
             
                 for count in range(12):
                 
-                    #current_block = maze_array[x_column][rand1]
+                    
                     next_block = [0, 1, 2, 3]
+                    #array holding all the possible paths to take
                     if rand2 == 0 or previous_block == 2 :
                         next_block.remove(0)
                     if rand2 == 19 or previous_block == 0:
@@ -711,13 +722,15 @@ def maze_generate():
                         next_block.remove(1)
                     if y_row == 19 or previous_block == 1:
                         next_block.remove(3)
+                    #remove a value from the array if the path can not travel in that direction
     
                     random2 = random.choice(next_block)
+                    #randomly choose the next floor position for the path
 
                     if random2 == 0:
                         rand2 = rand2 - 1
                         block_sprite_list.remove(maze_array[rand2][y_row])
-                        #block_array.remove(maze_array[x_column][rand1])
+                        #replace the block to the left of the current path with a floor object
                         all_sprites_list.remove(maze_array[rand2][y_row])
                         maze_array[rand2][y_row] = Floor(LIGHTGRAY, rand2 * 40, y_row * 40)
                         floor_sprite_list.add(maze_array[rand2][y_row])
@@ -726,7 +739,7 @@ def maze_generate():
                     elif random2 == 1:
                         y_row = y_row - 1
                         block_sprite_list.remove(maze_array[rand2][y_row])
-                        #block_array.remove(maze_array[x_column][rand1])
+                        #replace the block above the current one with a floor object
                         all_sprites_list.remove(maze_array[rand2][y_row])
                         maze_array[rand2][y_row] = Floor(LIGHTGRAY, rand2 * 40, y_row * 40)
                         floor_sprite_list.add(maze_array[rand2][y_row])
@@ -735,7 +748,7 @@ def maze_generate():
                     elif random1 == 2:
                         rand2 += 1
                         block_sprite_list.remove(maze_array[rand2][y_row])
-                        #block_array.remove(maze_array[x_column][rand1])
+                        #replace the floor to the right of the current one wih a floor object
                         all_sprites_list.remove(maze_array[rand2][y_row])
                         maze_array[rand2][y_row] = Floor(LIGHTGRAY, rand2 * 40, y_row * 40)
                         floor_sprite_list.add(maze_array[rand2][y_row])
@@ -744,7 +757,7 @@ def maze_generate():
                     elif random1 == 3:
                         y_row += 1
                         block_sprite_list.remove(maze_array[rand2][y_row])
-                        #block_array.remove(maze_array[x_column][rand1])
+                        #replace the block underneeath the current one with a floor object
                         all_sprites_list.remove(maze_array[rand2][y_row])
                         maze_array[rand2][y_row] = Floor(LIGHTGRAY, rand2 * 40, y_row * 40)
                         floor_sprite_list.add(maze_array[rand2][y_row])
@@ -753,6 +766,7 @@ def maze_generate():
 
                 
                     previous_block = random2
+                    #set the previous block to the current one so the path cant go into itself
                 
                 
                     

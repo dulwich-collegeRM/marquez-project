@@ -22,7 +22,7 @@ done = False
 clock = pygame.time.Clock()
 
 class Player(pygame.sprite.Sprite):
-
+    #function to initiat the player class
     def __init__(self, color, width, height, x, y):
         super().__init__()
         self.image = pygame.Surface([width, height])
@@ -31,7 +31,7 @@ class Player(pygame.sprite.Sprite):
         self.x_speed = 0
         self.y_speed = 0
         self.lives = 3
-        
+        #sets the players sprite as a square and set its parameters
         pygame.draw.rect(self.image, color, [100, 100, width, height])
 
         self.heigth = height
@@ -40,24 +40,24 @@ class Player(pygame.sprite.Sprite):
         
         x = self.rect.x
         y = self.rect.y
-
+        #sets the players collision boundaries
         self.rect.topleft = [x, y]
         self.rect.topright = [x + width, y]
         self.rect.bottomleft = [x, y + height]
         self.rect.bottomright = [x + width, y + height]
 
-
+    #Function for controlling the movement direction of the player
     def control(self,x,y):
         self.x_speed = x
         self.y_speed = y
 
-
+    #updates the players position to the new one
     def update(self):
         self.rect.x += self.x_speed 
         self.rect.y += self.y_speed
         
-        
-    def collide(self, all_sprites_list):
+    
+    def collide(self, all_sprites):
         if pygame.sprite.spritecollide(self, all_sprites_list, False):
             self.lives = 3
 

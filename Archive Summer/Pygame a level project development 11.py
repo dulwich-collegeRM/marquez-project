@@ -2,6 +2,7 @@ import pygame
  
 # Define some colors
 BLACK = (0, 0, 0)
+GRAY = ( 200, 200, 200)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
@@ -569,15 +570,17 @@ block2 = Block(BLACK, 80, 40)
 block_array.append(block2)
 block = Block(BLACK, 0, 0)
 block_array.append(block)
+floor = Floor(GRAY, 100, 100)
 
 
 
-player = Player(BLUE, 100, 100)
+player = Player(RED, 100, 100)
 
 all_sprites_list.add(player)
 all_sprites_list.add(block)
 #all_sprites_list.add(floor)
 all_sprites_list.add(block2)
+all_sprites_list.add(floor)
 block_sprite_list.add(block)
 block_sprite_list.add(block2)
 #floor_sprite_list.add(floor)
